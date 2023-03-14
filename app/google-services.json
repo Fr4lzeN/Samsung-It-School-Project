@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "883852127084",
+    "project_id": "friendsy-3d4ab",
+    "storage_bucket": "friendsy-3d4ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883852127084:android:0cdee0806739e70ff66149",
+        "android_client_info": {
+          "package_name": "com.example.bubble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883852127084-gglj8ggd48a9q1cg7rosaveta4b532p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZcOCQJc4OR-jlwli6246fsKfU3_Fg9MQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883852127084-gglj8ggd48a9q1cg7rosaveta4b532p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

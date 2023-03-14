@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/search"
+        android:enabled="true"
+        android:icon="@drawable/search_vector"
+        android:title="search"/>
+    <item
+        android:id="@+id/messages"
+        android:enabled="true"
+        android:icon="@drawable/chat_vector"
+        android:title="messages"/>
+    <item
+        android:id="@+id/friends"
+        android:enabled="true"
+        android:icon="@drawable/smile_vector"
+        android:title="friends"/>
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/user_vector"
+        android:title="profile"/>
+</menu>
