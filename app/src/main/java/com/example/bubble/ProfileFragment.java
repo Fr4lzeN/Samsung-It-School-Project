@@ -86,7 +86,6 @@ public class ProfileFragment extends Fragment {
                  binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                  binding.recyclerView.setAdapter(adapter);
                  binding.recyclerView.setVisibility(View.VISIBLE);
-                 adapter.notifyItemRangeChanged(0, data.size());
              }
             }
         });

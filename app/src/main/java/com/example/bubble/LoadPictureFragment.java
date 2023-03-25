@@ -42,6 +42,7 @@ public class LoadPictureFragment extends Fragment{
     FragmentLoadPictureBinding binding;
     int changePicture = -1;
     int addPicture = 0;
+    List<Boolean> results;
     TakePictureRecyclerView adapter;
     boolean nextFragment = false;
 
@@ -137,57 +138,55 @@ public class LoadPictureFragment extends Fragment{
         startActivity(intent);
     }
 
-    void sendUserData(){
+    void sendUserData() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        String uid = user.getUid();
+        int[] dateOfBirth = FillDataActivity.getDateOfBirth();
+        List<Uri> pictures = FillDataActivity.getData();
+        results = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference DBreference = database.getReference("userData").child(uid);
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(FillDataActivity.getName())
                 .setPhotoUri(FillDataActivity.getData().get(1)).build();
+
         user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                results.add(task.isSuccessful());
+                if (task.isSuccessful()) {
                     Log.d("DataBase", "UserUpdateSuccess");
-                    sendData(user.getUid());
-                }
-                else{
+                } else {
                     Log.d("DataBase", "UserUpdateFailture");
-                    errorToast();
+                }
+                if (results.size() == pictures.size()+1) {
+                    checkResult(results);
                 }
             }
         });
-    }
-
-    void sendData(String uid){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("userData").child(uid);
-        int[] dateOfBirth = FillDataActivity.getDateOfBirth();
-        reference.push().setValue(new UserInfoJSON(FillDataActivity.getName(),FillDataActivity.getInfo(),FillDataActivity.getGender(), dateOfBirth[0], dateOfBirth[1], dateOfBirth[2])).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DBreference.setValue(new UserInfoJSON(FillDataActivity.getName(), FillDataActivity.getInfo(), FillDataActivity.getGender(), dateOfBirth[0], dateOfBirth[1], dateOfBirth[2])).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                results.add(task.isSuccessful());
+                if (task.isSuccessful()) {
                     Log.d("DataBase", "UserJsonSuccess");
-                    sendPicture(uid);
-                }
-                else{
+
+                } else {
                     Log.d("DataBase", "UserJsonFailture");
-                    errorToast();
+                }
+                if (results.size() == pictures.size()+1) {
+                    checkResult(results);
                 }
             }
         });
-    }
-
-    void sendPicture(String uid){
-        List<Uri> pictures = FillDataActivity.getData();
-        List<Boolean> results = new ArrayList<>();
-        for (int i=1; i<pictures.size(); i++) {
-            StorageReference reference = FirebaseStorage.getInstance().getReference().child(uid+"/"+String.valueOf(i));
-            int finalI = i;
+        for (int i = 1; i < pictures.size(); i++) {
+            StorageReference reference = FirebaseStorage.getInstance().getReference().child(uid + "/" + String.valueOf(i));
             reference.putFile(pictures.get(i)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     results.add(task.isSuccessful());
-                    if (results.size()==pictures.size()-1){
+                    if (results.size() == pictures.size()+1) {
                         checkResult(results);
                     }
                 }
@@ -199,15 +198,11 @@ public class LoadPictureFragment extends Fragment{
         for (int i=0; i<results.size(); i++){
             if (!results.get(i)){
                 Log.d("DataBase", "pictures");
-                errorToast();
+                Toast.makeText(getContext(), "Ошибка отправки данных", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
         mainActivity();
-    }
-
-    void errorToast(){
-        Toast.makeText(getContext(), "Ошибка отправки данных", Toast.LENGTH_SHORT).show();
     }
 
 }
