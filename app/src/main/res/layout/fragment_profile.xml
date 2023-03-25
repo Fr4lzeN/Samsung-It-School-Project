@@ -19,25 +19,23 @@
         android:textSize="32sp"
         android:gravity="center"/>
 
-    <ImageView
-        android:id="@+id/profilePicture"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         app:layout_constraintTop_toBottomOf="@id/FragmentTextView"
-        app:layout_constraintBottom_toTopOf="@id/name"
-        />
+        app:layout_constraintBottom_toTopOf="@id/name"/>
     <EditText
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profilePicture"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
         app:layout_constraintBottom_toTopOf="@id/info"
         android:hint="Имя"
-        android:inputType="none"/>
+        android:inputType="none"
+        android:focusable="false"/>
     <EditText
         android:id="@+id/info"
         android:layout_width="match_parent"
@@ -46,5 +44,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
         android:minLines="10"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/signOutButton"
+        android:inputType="none"
+        android:focusable="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/signOutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info"
+        android:text="Выйти из аккаунта"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

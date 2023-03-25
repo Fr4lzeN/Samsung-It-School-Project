@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "883852127084",
     "project_id": "friendsy-3d4ab",
-    "storage_bucket": "friendsy-3d4ab.appspot.com"
+    "storage_bucket": "friendsy-3d4ab.appspot.com",
+    "firebase_url": "https://friendsy-3d4ab-default-rtdb.europe-west1.firebasedatabase.app"
   },
   "client": [
     {

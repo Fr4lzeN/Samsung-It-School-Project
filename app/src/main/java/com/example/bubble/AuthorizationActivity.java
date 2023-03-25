@@ -18,5 +18,7 @@ public class AuthorizationActivity extends AppCompatActivity {
         binding=ActivityAuthorizationBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+
     }
 }

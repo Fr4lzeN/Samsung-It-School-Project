@@ -4,13 +4,29 @@ import android.widget.ImageView;
 
 public class UserInfoJSON {
 
-    String login;
     public String name;
     public String info;
-    public ImageView profilePicture;
+    public String gender;
+    public DateOfBirth dateOfBirth;
 
-    UserInfoJSON(String login){
-        this.login=login;
+    public UserInfoJSON(String name, String info, String gender, int year, int month, int day) {
+        this.name = name;
+        this.info = info;
+        this.dateOfBirth = new DateOfBirth(year, month, day);
+        this.gender=gender;
     }
+
+    public class DateOfBirth{
+        public int year;
+        public int month;
+        public int day;
+
+        public DateOfBirth(int year, int month, int day) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+        }
+    }
+
 
 }

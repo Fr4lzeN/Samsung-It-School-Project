@@ -2,4 +2,7 @@
     <string name="app_name">Bubble</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="female"><u>женщина</u></string>
+    <string name="male"><u>мужчина</u></string>
+    <string name="other_gender"><u>другой</u></string>
 </resources>

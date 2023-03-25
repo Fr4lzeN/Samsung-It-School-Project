@@ -13,52 +13,38 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/viewLayout">
-    <EditText
-        android:id="@+id/loginEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/passwordEditText"
-        android:hint="Login"
-        app:layout_constraintVertical_chainStyle="packed"
-        />
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginEditText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:hint="Password"
-        />
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.3"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/finish"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        android:text="Обратно"/>
-    <Button
-        android:id="@+id/finish"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.3"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/backButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        android:text="Далее"/>
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Номер телефона"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/finish"
+            app:layout_constraintEnd_toEndOf="@id/finish"
+            app:layout_constraintStart_toStartOf="@id/finish"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+
+        <Button
+            android:id="@+id/finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вход в аккаунт"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumber"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </FrameLayout>

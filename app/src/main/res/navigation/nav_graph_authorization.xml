@@ -3,40 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentAuthorizationMode">
+    app:startDestination="@id/loginFragment">
 
-    <fragment
-        android:id="@+id/fragmentAuthorizationMode"
-        android:name="com.example.bubble.AuthorizationModeFragment"
-        android:label="fragment_authorization_mode"
-        tools:layout="@layout/fragment_authorization_mode">
-        <action
-            android:id="@+id/action_authorizationMode_to_registration"
-            app:destination="@id/registartionFragment"
-        />
-        <action
-            android:id="@+id/action_authorizationMode_to_login"
-            app:destination="@id/loginFragment"
-            />
-    </fragment>
-
-    <fragment
-        android:id="@+id/registartionFragment"
-        android:name="com.example.bubble.RegistrationFragment"
-        android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration">
-
-
-    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.bubble.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
-
-
+        <action
+            android:id="@+id/action_loginFragment_to_phoneVerificationFragment"
+            app:destination="@id/phoneVerificationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/phoneVerificationFragment"
+        android:name="com.example.bubble.PhoneVerificationFragment"
+        android:label="fragment_phone_verification"
+        tools:layout="@layout/fragment_phone_verification" />
 
 
 </navigation>
