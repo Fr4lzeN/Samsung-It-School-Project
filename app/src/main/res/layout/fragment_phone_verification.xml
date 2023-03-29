@@ -26,7 +26,8 @@
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <EditText
         android:id="@+id/code1"
@@ -40,7 +41,7 @@
         app:layout_constraintEnd_toStartOf="@id/code2"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
     <EditText
         android:id="@+id/code2"
         android:layout_width="0dp"
@@ -53,7 +54,7 @@
         app:layout_constraintEnd_toStartOf="@id/code3"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
     <EditText
         android:id="@+id/code3"
         android:layout_width="0dp"
@@ -66,7 +67,7 @@
         app:layout_constraintEnd_toStartOf="@id/code4"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
     <EditText
         android:id="@+id/code4"
         android:layout_width="0dp"
@@ -79,7 +80,7 @@
         app:layout_constraintEnd_toStartOf="@id/code5"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
     <EditText
         android:id="@+id/code5"
         android:layout_width="0dp"
@@ -92,7 +93,7 @@
         app:layout_constraintEnd_toStartOf="@id/code6"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
     <EditText
         android:id="@+id/code6"
         android:layout_width="0dp"
@@ -105,6 +106,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:maxLength="1"
         android:inputType="numberDecimal"
-        />
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
