@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.JSON;
 
 public class LoginDataJSON {
     public Boolean result;

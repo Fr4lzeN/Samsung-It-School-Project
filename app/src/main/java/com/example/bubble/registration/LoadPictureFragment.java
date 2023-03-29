@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.registration;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -22,7 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.bubble.JSON.UserInfoJSON;
+import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentLoadPictureBinding;
+import com.example.bubble.mainMenu.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,37 +53,28 @@ public class LoadPictureFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding=FragmentLoadPictureBinding.inflate(inflater,container,false);
-        adapter = new TakePictureRecyclerView(FillDataActivity.getData(), new TakePictureRecyclerView.OnItemClickListener() {
-            @Override
-            public void onItemClick(Uri data, int position) {
-                if (position==addPicture){
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, addPicture);
-                }
-                else{
-                    onCreateDialog(position);
-                }
+        adapter = new TakePictureRecyclerView(FillDataActivity.getData(), (data, position) -> {
+            if (position==addPicture){
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, addPicture);
+            }
+            else{
+                onCreateDialog(position);
             }
         });
        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
        binding.recyclerView.setAdapter(adapter);
        checkButton();
-        binding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.backButton.setOnClickListener(view -> {
                 Navigation.findNavController(binding.getRoot()).popBackStack();
-            }
         });
-        binding.nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.nextButton.setOnClickListener(view -> {
                 if (nextFragment){
                     sendUserData();
                 }
                 else{
                     Toast.makeText(getContext(), "Необходимо загрузить хотя бы одну фотографию", Toast.LENGTH_SHORT).show();
                 }
-            }
         });
 
         return binding.getRoot();
@@ -92,31 +86,27 @@ public class LoadPictureFragment extends Fragment{
         if(resultCode==RESULT_OK && data!=null) {
             if (requestCode==addPicture){
                 adapter.addData(data.getData());
-                checkButton();
-                return;
             }
             if (requestCode==changePicture){
                 adapter.changeData(data.getData());
             }
+            checkButton();
         }
     }
 
     public void onCreateDialog(int position){
         final  String[] actions = {"Изменить фото", String.valueOf(Html.fromHtml("<font color='#ff0000'>Удалить фото</font>"))};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setItems(actions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case 0:
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        adapter.setPictureChangePosition(position);
-                        startActivityForResult(intent, changePicture);
-                        break;
-                    case 1:
-                        adapter.deleteData(position);
-                        break;
-                }
+        builder.setItems(actions, (dialog, which) -> {
+            switch (which){
+                case 0:
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    adapter.setPictureChangePosition(position);
+                    startActivityForResult(intent, changePicture);
+                    break;
+                case 1:
+                    adapter.deleteData(position);
+                    break;
             }
         }).show();
     }
@@ -131,13 +121,6 @@ public class LoadPictureFragment extends Fragment{
             nextFragment=false;
         }
     }
-
-    void mainActivity(){
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
     void sendUserData() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -151,58 +134,40 @@ public class LoadPictureFragment extends Fragment{
                 .setDisplayName(FillDataActivity.getName())
                 .setPhotoUri(FillDataActivity.getData().get(1)).build();
 
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                results.add(task.isSuccessful());
-                if (task.isSuccessful()) {
-                    Log.d("DataBase", "UserUpdateSuccess");
-                } else {
-                    Log.d("DataBase", "UserUpdateFailture");
-                }
-                if (results.size() == pictures.size()+1) {
-                    checkResult(results);
-                }
-            }
-        });
-        DBreference.setValue(new UserInfoJSON(FillDataActivity.getName(), FillDataActivity.getInfo(), FillDataActivity.getGender(), dateOfBirth[0], dateOfBirth[1], dateOfBirth[2])).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                results.add(task.isSuccessful());
-                if (task.isSuccessful()) {
-                    Log.d("DataBase", "UserJsonSuccess");
-
-                } else {
-                    Log.d("DataBase", "UserJsonFailture");
-                }
-                if (results.size() == pictures.size()+1) {
-                    checkResult(results);
-                }
-            }
-        });
+        user.updateProfile(profileUpdates).addOnCompleteListener(databaseListener);
+        DBreference.setValue(new UserInfoJSON(FillDataActivity.getName(), FillDataActivity.getInfo(), FillDataActivity.getGender(), dateOfBirth[0], dateOfBirth[1], dateOfBirth[2])).addOnCompleteListener(databaseListener);
         for (int i = 1; i < pictures.size(); i++) {
             StorageReference reference = FirebaseStorage.getInstance().getReference().child(uid + "/" + String.valueOf(i));
-            reference.putFile(pictures.get(i)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    results.add(task.isSuccessful());
-                    if (results.size() == pictures.size()+1) {
-                        checkResult(results);
-                    }
-                }
-            });
+            reference.putFile(pictures.get(i)).addOnCompleteListener(storageListener);
         }
     }
+    OnCompleteListener<UploadTask.TaskSnapshot> storageListener = task -> {
+        results.add(task.isSuccessful());
+        checkResult(results);
+    };
+
+    OnCompleteListener<Void> databaseListener = task -> {
+        results.add(task.isSuccessful());
+        checkResult(results);
+    };
 
     void checkResult(List<Boolean> results){
         for (int i=0; i<results.size(); i++){
             if (!results.get(i)){
-                Log.d("DataBase", "pictures");
+                Log.d("Data", "error");
                 Toast.makeText(getContext(), "Ошибка отправки данных", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
-        mainActivity();
+        if (results.size()==FillDataActivity.getData().size()+1) {
+            mainActivity();
+        }
+    }
+
+    void mainActivity(){
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 }

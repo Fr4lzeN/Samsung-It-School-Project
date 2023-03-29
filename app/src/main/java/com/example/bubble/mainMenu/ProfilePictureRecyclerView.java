@@ -1,24 +1,26 @@
-package com.example.bubble;
+package com.example.bubble.mainMenu;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bubble.databinding.ProfilePictureItemListBinding;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 public class ProfilePictureRecyclerView extends RecyclerView.Adapter<ProfilePictureRecyclerView.PictureHolder> {
 
-    List<Uri> data;
+    List<StorageReference> data;
 
-    public ProfilePictureRecyclerView(List<Uri> data) {
+
+    public ProfilePictureRecyclerView(List<StorageReference> data) {
         this.data = data;
     }
 
@@ -31,7 +33,7 @@ public class ProfilePictureRecyclerView extends RecyclerView.Adapter<ProfilePict
 
     @Override
     public void onBindViewHolder(@NonNull PictureHolder holder, int position) {
-        Picasso.get().load(data.get(position)).into(holder.image);
+        Glide.with(holder.itemView.getContext()).load(data.get(position)).into(holder.image);
     }
 
     @Override

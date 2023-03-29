@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +10,14 @@ import androidx.navigation.Navigation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.bubble.R;
+import com.example.bubble.mainMenu.MainActivity;
 import com.example.bubble.databinding.FragmentPhoneVerificationBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,14 +26,13 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class PhoneVerificationFragment extends Fragment {
+public class PhoneVerificationFragment extends Fragment implements View.OnKeyListener {
 
     FragmentPhoneVerificationBinding binding;
     FirebaseAuth mAuth;
@@ -255,4 +257,58 @@ public class PhoneVerificationFragment extends Fragment {
     }
 
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        switch (v.getId()){
+            case R.id.code1:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code2.requestFocus();
+                }
+                break;
+            case R.id.code2:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code3.requestFocus();
+                }
+                else{
+                    binding.code1.requestFocus();
+                }
+                break;
+            case R.id.code3:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code4.requestFocus();
+                }
+                else{
+                    binding.code2.requestFocus();
+                }
+                break;
+            case R.id.code4:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code5.requestFocus();
+                }
+                else{
+                    binding.code3.requestFocus();
+                }
+                break;
+            case R.id.code5:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code6.requestFocus();
+                }
+                else{
+                    binding.code4.requestFocus();
+                }
+                break;
+            case R.id.code6:
+                if (keyCode!=KeyEvent.KEYCODE_DEL){
+                    binding.code3.requestFocus();
+                }
+                else{
+                    binding.code6.clearFocus();
+                    code = binding.code1.getText().toString()+binding.code2.getText().toString()+binding.code3.getText().toString()+binding.code4.getText().toString()+binding.code5.getText().toString()+binding.code6.getText().toString();
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+                    signInWithPhoneAuthCredential(credential);
+                }
+                break;
+        }
+        return false;
+    }
 }

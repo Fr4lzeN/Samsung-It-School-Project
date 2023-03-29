@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.JSON;
 
 import android.widget.ImageView;
 

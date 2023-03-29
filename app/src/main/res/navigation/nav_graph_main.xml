@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.bubble.SearchFragment"
+        android:name="com.example.bubble.mainMenu.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.example.bubble.MessagesFragment"
+        android:name="com.example.bubble.mainMenu.MessagesFragment"
         android:label="fragment_messages"
         tools:layout="@layout/fragment_messages" />
     <fragment
         android:id="@+id/friendsFragment"
-        android:name="com.example.bubble.FriendsFragment"
+        android:name="com.example.bubble.mainMenu.FriendsFragment"
         android:label="fragment_friends"
         tools:layout="@layout/fragment_friends" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.bubble.ProfileFragment"
+        android:name="com.example.bubble.mainMenu.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment

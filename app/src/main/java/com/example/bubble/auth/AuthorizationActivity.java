@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 

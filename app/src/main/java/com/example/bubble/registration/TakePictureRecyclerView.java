@@ -1,4 +1,4 @@
-package com.example.bubble;
+package com.example.bubble.registration;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bubble.databinding.PickProfilePictureItemListBinding;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -93,13 +93,8 @@ public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRe
           image = binding.image;
       }
       public void bind (Uri item, OnItemClickListener listener, int position){
-          Picasso.get().load(item).into(image);
-          image.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  listener.onItemClick(item, position);
-              }
-          });
+          Glide.with(itemView.getContext()).load(item).into(image);
+          image.setOnClickListener(v -> listener.onItemClick(item, position));
       }
     }
 

@@ -1,5 +1,8 @@
 package com.example.bubble;
 
+import com.example.bubble.JSON.LoginDataJSON;
+import com.example.bubble.JSON.UserInfoJSON;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

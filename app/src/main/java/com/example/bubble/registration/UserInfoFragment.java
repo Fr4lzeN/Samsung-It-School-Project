@@ -1,8 +1,6 @@
-package com.example.bubble;
+package com.example.bubble.registration;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentUserInfoBinding;
+import com.example.bubble.registration.FillDataActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,9 +40,7 @@ public class UserInfoFragment extends Fragment {
         }
         buttonColor();
 
-        binding.dateOfBirth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.dateOfBirth.setOnClickListener(view -> {
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -54,7 +52,6 @@ public class UserInfoFragment extends Fragment {
                         day);
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
-            }
         });
 
         datePicker = new DatePickerDialog.OnDateSetListener() {
@@ -102,9 +99,7 @@ public class UserInfoFragment extends Fragment {
             }
         });
 
-        binding.nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.nextButton.setOnClickListener(view -> {
                 if (nextFragment){
                     Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userInfoFragment_to_hobbyFragment);
                 }
@@ -125,7 +120,6 @@ public class UserInfoFragment extends Fragment {
                         return;
                     }
                 }
-            }
         });
 
         return binding.getRoot();

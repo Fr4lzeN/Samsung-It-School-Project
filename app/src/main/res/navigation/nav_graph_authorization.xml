@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.bubble.LoginFragment"
+        android:name="com.example.bubble.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/phoneVerificationFragment"
-        android:name="com.example.bubble.PhoneVerificationFragment"
+        android:name="com.example.bubble.auth.PhoneVerificationFragment"
         android:label="fragment_phone_verification"
         tools:layout="@layout/fragment_phone_verification" />
 

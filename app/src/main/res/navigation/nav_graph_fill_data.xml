@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/loadPictureFragment"
-        android:name="com.example.bubble.LoadPictureFragment"
+        android:name="com.example.bubble.registration.LoadPictureFragment"
         android:label="fragment_load_picture"
         tools:layout="@layout/fragment_load_picture" />
     <fragment
         android:id="@+id/hobbyFragment"
-        android:name="com.example.bubble.HobbyFragment"
+        android:name="com.example.bubble.registration.HobbyFragment"
         android:label="fragment_hobby"
         tools:layout="@layout/fragment_hobby" >
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="com.example.bubble.UserInfoFragment"
+        android:name="com.example.bubble.registration.UserInfoFragment"
         android:label="fragment_user_info"
         tools:layout="@layout/fragment_user_info" >
         <action

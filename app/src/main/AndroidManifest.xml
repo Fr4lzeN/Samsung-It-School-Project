@@ -16,13 +16,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".FillDataActivity"
+            android:name=".registration.FillDataActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthorizationActivity"
+            android:name=".auth.AuthorizationActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".mainMenu.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
