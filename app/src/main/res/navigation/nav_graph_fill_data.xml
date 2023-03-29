@@ -9,7 +9,11 @@
         android:id="@+id/loadPictureFragment"
         android:name="com.example.bubble.registration.LoadPictureFragment"
         android:label="fragment_load_picture"
-        tools:layout="@layout/fragment_load_picture" />
+        tools:layout="@layout/fragment_load_picture" >
+        <action
+            android:id="@+id/action_loadPictureFragment_to_loadingFragment2"
+            app:destination="@id/loadingFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/hobbyFragment"
         android:name="com.example.bubble.registration.HobbyFragment"
@@ -28,4 +32,9 @@
             android:id="@+id/action_userInfoFragment_to_hobbyFragment"
             app:destination="@id/hobbyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loadingFragment2"
+        android:name="com.example.bubble.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading" />
 </navigation>

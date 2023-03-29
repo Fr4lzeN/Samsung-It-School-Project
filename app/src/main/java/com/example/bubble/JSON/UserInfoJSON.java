@@ -9,6 +9,9 @@ public class UserInfoJSON {
     public String gender;
     public DateOfBirth dateOfBirth;
 
+    public UserInfoJSON() {
+    }
+
     public UserInfoJSON(String name, String info, String gender, int year, int month, int day) {
         this.name = name;
         this.info = info;
@@ -16,10 +19,13 @@ public class UserInfoJSON {
         this.gender=gender;
     }
 
-    public class DateOfBirth{
+    public static class DateOfBirth{
         public int year;
         public int month;
         public int day;
+
+        public DateOfBirth() {
+        }
 
         public DateOfBirth(int year, int month, int day) {
             this.year = year;

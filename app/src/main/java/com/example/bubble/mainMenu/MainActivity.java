@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                    replaceFragment(new FriendsFragment());
                    break;
                case R.id.profile:
-                   replaceFragment(new ProfileFragment(this.getPreferences(MODE_PRIVATE).getString("login", null)));
+                   replaceFragment(new ProfileFragment());
                    break;
            }
            return true;

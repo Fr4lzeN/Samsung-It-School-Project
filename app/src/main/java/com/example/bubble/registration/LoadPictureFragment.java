@@ -106,6 +106,7 @@ public class LoadPictureFragment extends Fragment{
                     break;
                 case 1:
                     adapter.deleteData(position);
+                    checkButton();
                     break;
             }
         }).show();
@@ -140,6 +141,7 @@ public class LoadPictureFragment extends Fragment{
             StorageReference reference = FirebaseStorage.getInstance().getReference().child(uid + "/" + String.valueOf(i));
             reference.putFile(pictures.get(i)).addOnCompleteListener(storageListener);
         }
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loadPictureFragment_to_loadingFragment2);
     }
     OnCompleteListener<UploadTask.TaskSnapshot> storageListener = task -> {
         results.add(task.isSuccessful());
@@ -169,5 +171,4 @@ public class LoadPictureFragment extends Fragment{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
 }
