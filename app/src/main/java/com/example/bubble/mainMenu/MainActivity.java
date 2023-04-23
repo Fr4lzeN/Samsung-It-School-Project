@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
     void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
+        for (int i=0; i< fragmentManager.getBackStackEntryCount(); i++){
+            fragmentManager.popBackStack();
+        }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
         fragmentTransaction.commit();

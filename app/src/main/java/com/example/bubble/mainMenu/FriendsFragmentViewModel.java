@@ -1,18 +1,22 @@
 package com.example.bubble.mainMenu;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class FriendsFragmentViewModel extends ViewModel {
 
-    PeopleListRecyclerView friendsAdapter;
-    PeopleListRecyclerView outcomingAdapter;
-    PeopleListRecyclerView incomingAdapter;
+    MutableLiveData<PeopleListRecyclerView> friendsAdapter = new MutableLiveData<>();
+    MutableLiveData<PeopleListRecyclerView> outcomingAdapter = new MutableLiveData<>();
+    MutableLiveData<PeopleListRecyclerView> incomingAdapter = new MutableLiveData<>();
 
-    MutableLiveData<Boolean> allDataDownloaded = new MutableLiveData<>();
 
-    public void  createAdapters(){
-        FriendsFragmentModel.createAdapters();
+
+    public void  createAdapters(Fragment fragment){
+        friendsAdapter.setValue(null);
+        outcomingAdapter.setValue(null);
+        incomingAdapter.setValue(null);
+        FriendsFragmentModel.createAdapters(fragment, friendsAdapter, outcomingAdapter, incomingAdapter);
     }
 
 }

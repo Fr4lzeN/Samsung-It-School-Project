@@ -25,6 +25,9 @@ public class SearchFragment extends Fragment {
     FragmentSearchBinding binding;
     SearchHobbiesRecyclerView adapter;
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

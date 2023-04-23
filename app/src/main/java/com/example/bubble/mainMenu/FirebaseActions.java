@@ -171,39 +171,20 @@ public class FirebaseActions {
         return userHobbies.get();
     }
 
-    public static Task<Void> deleteHobbies(List<String> hobbyList, ArrayList<Boolean> hobbies, ArrayList<Boolean> currentHobbies) {
-        DatabaseReference hobbiesReference = FirebaseDatabase.getInstance().getReference("hobbies");
-        String uid = FirebaseAuth.getInstance().getUid();
-        ArrayList<Task<Void>> tasks = new ArrayList<>();
-        for (int i=0; i<hobbyList.size(); i++){
-            if (hobbies.get(i)!=currentHobbies.get(i)){
-                if (!hobbies.get(i)){
-                    tasks.add(hobbiesReference.child(hobbyList.get(i)).child(uid).removeValue());
-                }
-            }
-        }
-        return Tasks.whenAll(tasks);
-    }
+    public static void getFriends(MutableLiveData<Map<String,FriendStatus>> map){
 
-    public static void getUserUidByHobby(int start, int end, String hobby, List<String> uids, Map<String, UserInfoJSON> map, PeopleListRecyclerView adapter){
-        DatabaseReference hobbyReference = FirebaseDatabase.getInstance().getReference("hobbies").child(hobby);
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("userData");
-        List<Task<DataSnapshot>> tasks = new ArrayList<>();
-        final int size = map.size();
-        hobbyReference.addValueEventListener(new ValueEventListener() {
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    HashMap<String, String> tempMap = snapshot.getValue(new GenericTypeIndicator<HashMap<String, String>>() {
-                    });
-                    for (Map.Entry<String, String> i : tempMap.entrySet()) {
-                        String uid = i.getValue();
-                        Log.d("Hobby", uid);
-                        uids.add(uid);
-                        tasks.add(userReference.child(uid).child("userInfo").get().addOnCompleteListener(task -> map.put(uid, task.getResult().getValue(UserInfoJSON.class))));
-                    }
-                    Tasks.whenAll(tasks).addOnCompleteListener(task -> adapter.notifyItemRangeChanged(size, end - start));
+
+                try {
+                    map.setValue(snapshot.getValue(new GenericTypeIndicator<Map<String, FriendStatus>>() {}));
+                } catch (Throwable t){
+                    Log.wtf("Friends", t.toString());
                 }
+
             }
 
             @Override
@@ -211,16 +192,9 @@ public class FirebaseActions {
 
             }
         });
-        Tasks.whenAll(tasks).addOnCompleteListener(task -> {
-            adapter.notifyItemRangeChanged(size, end-start);
-            if (uids!=null & map!=null) {
-                Log.d("Hobby", map.toString());
-                Log.d("Hobby", uids.toString());
-            }else{
-                Log.d("Hobby", "null");
-            }
-        });
+
     }
+
 
     public static void getUserUidByHobby(String hobby, MutableLiveData<List<String>> uids){
         DatabaseReference hobbyReference = FirebaseDatabase.getInstance().getReference("hobbies").child(hobby);
