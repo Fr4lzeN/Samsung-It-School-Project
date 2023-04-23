@@ -5,4 +5,5 @@
     <string name="female"><u>женщина</u></string>
     <string name="male"><u>мужчина</u></string>
     <string name="other_gender"><u>другой</u></string>
+    <string name="security_privacy"><![CDATA[Security & Privacy]]></string>
 </resources>

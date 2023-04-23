@@ -18,11 +18,9 @@ public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRe
 
 
 
-    interface OnItemClickListener{
+    public interface OnItemClickListener{
         void onItemClick(Uri data, int position);
     }
-
-    int changePosition;
     List<Uri> data;
     OnItemClickListener listener;
 
@@ -34,15 +32,16 @@ public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRe
         if (count>=6) {
             this.notifyItemChanged(0);
         }
-        FillDataActivity.setData(this.data);
     }
 
-    public void changeData(Uri uri){
-        if (changePosition!=-1) {
-            data.set(changePosition, uri);
-            this.notifyItemChanged(changePosition);
-            FillDataActivity.setData(this.data);
-        }
+    public void changeData(Uri uri, int i){
+        data.set(i, uri);
+        this.notifyItemChanged(i);
+
+    }
+
+    public List<Uri> getData() {
+        return data;
     }
 
     public void deleteData(int position){
@@ -52,12 +51,8 @@ public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRe
         if (getItemCount()<6){
             this.notifyItemChanged(0);
         }
-        FillDataActivity.setData(this.data);
     }
 
-    public void setPictureChangePosition(int position) {
-        changePosition=position;
-    }
 
     public TakePictureRecyclerView(List<Uri> data, OnItemClickListener listener) {
         this.data = data;

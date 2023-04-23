@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bubble.databinding.ProfilePictureItemListBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.StorageReference;
@@ -49,5 +50,6 @@ public class ProfilePictureRecyclerView extends RecyclerView.Adapter<ProfilePict
             super(binding.getRoot());
             image = binding.image;
         }
+
     }
 }

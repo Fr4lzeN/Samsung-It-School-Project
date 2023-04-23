@@ -9,7 +9,11 @@
         android:id="@+id/searchFragment"
         android:name="com.example.bubble.mainMenu.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_peopleByHobbyFragment"
+            app:destination="@id/peopleByHobbyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.example.bubble.mainMenu.MessagesFragment"
@@ -22,12 +26,31 @@
         tools:layout="@layout/fragment_friends" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.bubble.mainMenu.ProfileFragment"
+        android:name="com.example.bubble.mainMenu.MyProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_my_profile" />
     <fragment
         android:id="@+id/loadingFragment"
         android:name="com.example.bubble.LoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.bubble.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.example.bubble.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" />
+    <fragment
+        android:id="@+id/peopleByHobbyFragment"
+        android:name="com.example.bubble.mainMenu.PeopleByHobbyFragment"
+        android:label="fragment_people_by_hobby"
+        tools:layout="@layout/fragment_people_by_hobby" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.bubble.mainMenu.UserProfileFragment"
+        android:label="UserProfileFragment" />
 </navigation>

@@ -1,11 +1,17 @@
 package com.example.bubble.registration;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.bubble.PictureActions;
 import com.example.bubble.R;
 
 import java.util.ArrayList;
@@ -13,70 +19,34 @@ import java.util.List;
 
 public class FillDataActivity extends AppCompatActivity {
 
-   static String name,info,gender;
-    static int[] dateOfBirth;
-    static List<Uri> data;
-    static public void clear(){
-        name=null;
-        info = null;
-        gender = null;
-        dateOfBirth = null;
-        data = null;
-    }
+    static FillDataViewModel viewModel;
 
-
-   static public void setName(String name) {
-        FillDataActivity.name = name;
-    }
-
-  static public void setInfo(String info) {
-      FillDataActivity.info = info;
-    }
-
-    static public void setGender(String gender) {
-        FillDataActivity.gender = gender;
-    }
-
-    static public void setData(List<Uri> data) {
-        FillDataActivity.data = data;
-    }
-
-    static public String getName() {
-        return name;
-    }
-
-    static public String getInfo() {
-        return info;
-    }
-
-    static public String getGender() {
-        return gender;
-    }
-
-    static public int[] getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    static public List<Uri> getData() {
-        return data;
-    }
-
-    public static void setDateOfBirth(int year, int month, int dayOfMonth) {
-       dateOfBirth = new int[]{year, month, dayOfMonth};
+    public static FillDataViewModel getViewModel() {
+        return viewModel;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_data);
-        if (data==null) {
-            data = new ArrayList<>();
-            data.add(new Uri.Builder()
-                    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                    .authority(getResources().getResourcePackageName(R.drawable.add_picture))
-                    .appendPath(getResources().getResourceTypeName(R.drawable.add_picture))
-                    .appendPath(getResources().getResourceEntryName(R.drawable.add_picture))
-                    .build());
+        viewModel= new ViewModelProvider(this).get(FillDataViewModel.class);
+        viewModel.initFirebase();
+        viewModel.createAdapter(this);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("ActivityRes", "FillData");
+        if(resultCode==RESULT_OK && data!=null) {
+            switch (requestCode/10){
+                case FillDataModel.addPicture:
+                    viewModel.addPictureToAdapter(data);
+                    break;
+                case FillDataModel.changePicture:
+                    viewModel.changeAdapterPicture(data, requestCode);
+                    break;
+            }
         }
+
     }
 }

@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/loadingFragment2"
-        android:name="com.example.bubble.LoadingFragment"
+        android:name="com.example.bubble.registration.FillDataLoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" />
 </navigation>

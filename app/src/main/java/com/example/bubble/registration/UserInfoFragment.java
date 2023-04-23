@@ -3,7 +3,9 @@ package com.example.bubble.registration;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.text.Editable;
@@ -27,18 +29,19 @@ public class UserInfoFragment extends Fragment {
     FragmentUserInfoBinding binding;
     DatePickerDialog.OnDateSetListener datePicker;
     boolean nextFragment = false;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUserInfoBinding.inflate(inflater, container, false);
-
-        binding.name.setText(FillDataActivity.getName());
-        binding.info.setText(FillDataActivity.getInfo());
-        int[] temp = FillDataActivity.getDateOfBirth();
-        if (temp!=null) {
-            binding.dateOfBirth.setText(String.valueOf(temp[2]) + "/" + String.valueOf(temp[1] + 1) + "/" + String.valueOf(temp[0]));
-        }
-        buttonColor();
+        binding.name.setText(FillDataActivity.getViewModel().getName());
+        binding.info.setText(FillDataActivity.getViewModel().getInfo());
+        FillDataActivity.getViewModel().dateOfBirth.observe(getViewLifecycleOwner(), temp ->{
+            binding.dateOfBirth.setText(temp[2] + "/" + temp[1] + "/" + temp[0]);
+            buttonColor();
+        });
 
         binding.dateOfBirth.setOnClickListener(view -> {
                 Calendar calendar = Calendar.getInstance();
@@ -54,67 +57,43 @@ public class UserInfoFragment extends Fragment {
                 datePickerDialog.show();
         });
 
-        datePicker = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                FillDataActivity.setDateOfBirth(year, month, dayOfMonth);
-                binding.dateOfBirth.setText(String.valueOf(dayOfMonth)+"/"+String.valueOf(month+1)+"/"+String.valueOf(year));
-                buttonColor();
-            }
+        datePicker = (view, year, month, dayOfMonth) -> {
+            FillDataActivity.getViewModel().setDateOfBirth(new Integer[]{year,month,dayOfMonth});
         };
 
-        binding.name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+        binding.name.addTextChangedListener(new MyTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                FillDataActivity.setName(binding.name.getText().toString());
+                FillDataActivity.getViewModel().setName(s.toString());
                 buttonColor();
             }
         });
 
-        binding.info.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+        binding.info.addTextChangedListener(new MyTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                FillDataActivity.setInfo(binding.info.getText().toString());
+                FillDataActivity.getViewModel().setInfo(s.toString());
                 buttonColor();
             }
         });
+
 
         binding.nextButton.setOnClickListener(view -> {
                 if (nextFragment){
                     Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userInfoFragment_to_hobbyFragment);
                 }
                 else{
-                    if (TextUtils.isEmpty(FillDataActivity.getName()) || FillDataActivity.getName().length()<2){
+                    if (TextUtils.isEmpty(binding.name.getText().toString()) || binding.name.getText().toString().length()<2){
                         binding.name.requestFocus();
                         Toast.makeText(getContext(), "Необходимо ввести имя", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (TextUtils.isEmpty(FillDataActivity.getInfo())){
+                    if (TextUtils.isEmpty(binding.info.getText().toString())){
                         binding.info.requestFocus();
                         Toast.makeText(getContext(), "Необходимо заполнить описание", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (FillDataActivity.getDateOfBirth().length==0){
+                    if (TextUtils.isEmpty(binding.dateOfBirth.getText().toString())){
                         binding.dateOfBirth.requestFocus();
                         Toast.makeText(getContext(), "Необходимо выбрать дату рождения", Toast.LENGTH_SHORT).show();
                         return;
@@ -126,7 +105,10 @@ public class UserInfoFragment extends Fragment {
     }
 
     void buttonColor(){
-        if (!TextUtils.isEmpty(FillDataActivity.getInfo())&&!TextUtils.isEmpty(FillDataActivity.getName())&&FillDataActivity.getName().length()>=2 && FillDataActivity.getDateOfBirth()!=null){
+        if (!TextUtils.isEmpty(binding.info.getText().toString()) &&
+                !TextUtils.isEmpty(binding.name.getText().toString()) &&
+                binding.name.getText().toString().length()>=2 &&
+                !TextUtils.isEmpty(binding.dateOfBirth.getText().toString())){
             binding.nextButton.setBackgroundColor(getResources().getColor(R.color.green));
             nextFragment=true;
         }else{

@@ -17,6 +17,23 @@
         app:layout_constraintBottom_toBottomOf="@id/text"
         />
 
+    <com.alimuzaffar.lib.pin.PinEntryEditText
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/txt_pin_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cursorVisible="false"
+        android:digits="1234567890"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textIsSelectable="false"
+        android:textSize="20sp"
+        app:pinBackgroundDrawable="@drawable/pin_drawable"
+        />
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
@@ -29,83 +46,34 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <EditText
-        android:id="@+id/code1"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextSwitcher
+        android:id="@+id/textSwitcher"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/code2"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/code2"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/code1"
-        app:layout_constraintEnd_toStartOf="@id/code3"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/code3"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/code2"
-        app:layout_constraintEnd_toStartOf="@id/code4"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/code4"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/code3"
-        app:layout_constraintEnd_toStartOf="@id/code5"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/code5"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/code4"
-        app:layout_constraintEnd_toStartOf="@id/code6"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/code6"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/code5"
         app:layout_constraintEnd_toEndOf="parent"
-        android:maxLength="1"
-        android:inputType="numberDecimal"
-        android:gravity="center"/>
+        app:layout_constraintTop_toBottomOf="@id/txt_pin_entry"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/newCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отправить код"
+            android:textColor="@color/teal_200"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+    </TextSwitcher>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

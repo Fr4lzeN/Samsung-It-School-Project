@@ -1,5 +1,6 @@
 package com.example.bubble.mainMenu;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -7,8 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.example.bubble.SettingsFragment;
 import com.example.bubble.databinding.ActivityMainBinding;
 import com.example.bubble.registration.FillDataActivity;
 import com.example.bubble.R;
@@ -20,8 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    DatabaseReference data;
     FirebaseAuth mAuth;
+    SearchFragment searchFragment = new SearchFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,24 +32,6 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         mAuth=FirebaseAuth.getInstance();
-        binding.bottomNavigationView.setSelectedItemId(0);
-       binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-           switch (item.getItemId()){
-               case R.id.search:
-                    replaceFragment(new SearchFragment());
-                   break;
-               case R.id.messages:
-                   replaceFragment(new MessagesFragment());
-                   break;
-               case R.id.friends:
-                   replaceFragment(new FriendsFragment());
-                   break;
-               case R.id.profile:
-                   replaceFragment(new ProfileFragment());
-                   break;
-           }
-           return true;
-       });
     }
 
     public void onStart(){
@@ -64,7 +49,24 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return;
         }
-        replaceFragment(new SearchFragment());
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.search:
+                    replaceFragment(searchFragment);
+                    break;
+                case R.id.messages:
+                    replaceFragment(new MessagesFragment());
+                    break;
+                case R.id.friends:
+                    replaceFragment(new FriendsFragment());
+                    break;
+                case R.id.profile:
+                    replaceFragment(new SettingsFragment(user));
+                    break;
+            }
+            return true;
+        });
+        binding.bottomNavigationView.setSelectedItemId(R.id.search);
         binding.bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
@@ -73,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data!=null && resultCode==RESULT_OK)
+            Log.d("Picture", "1");
+            EditPicturesFragmentDialog.getViewModel().onResult(requestCode, data.getData());
     }
 
 }

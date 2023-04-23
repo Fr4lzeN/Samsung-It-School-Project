@@ -36,31 +36,23 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginFragment extends Fragment {
     FragmentLoginBinding binding;
-    static String phoneNumber;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding=FragmentLoginBinding.inflate(inflater, container, false);
 
-        binding.finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                phoneNumber = binding.phoneNumber.getText().toString();
-                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() != 12) {
-                    Toast.makeText(getContext(), "Неправильный номер", Toast.LENGTH_SHORT).show();
-                    binding.phoneNumber.requestFocus();
-                    return;
-                }
+        binding.finish.setOnClickListener(v -> {
+            if (AuthorizationActivity.getViewModel().setPhoneNumber(binding.phoneNumber.getText().toString())) {
                 Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loginFragment_to_phoneVerificationFragment);
+            }
+            else{
+                Toast.makeText(getContext(), "Неправильный номер телефона", Toast.LENGTH_SHORT).show();
             }
         });
 
         return binding.getRoot();
     }
 
-    static String getPhoneNumber(){
-        return phoneNumber;
-    }
 
 
 }

@@ -33,13 +33,15 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.8" />
 
+
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/description"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
         android:orientation="horizontal"
         android:animateLayoutChanges="false">
 
@@ -77,6 +79,20 @@
             android:textColor="@drawable/radio_button_text_selector"/>
     </RadioGroup>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nextButton"
+        app:spanCount="19"
+        />
+
+
+
+
     <Button
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
@@ -96,5 +112,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="18sp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
