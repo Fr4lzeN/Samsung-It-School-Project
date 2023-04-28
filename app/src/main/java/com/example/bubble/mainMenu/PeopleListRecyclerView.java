@@ -1,5 +1,6 @@
 package com.example.bubble.mainMenu;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.databinding.PeopleListItemListBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -46,7 +49,9 @@ public class PeopleListRecyclerView extends RecyclerView.Adapter<PeopleListRecyc
     public void onBindViewHolder(@NonNull PeopleListViewHolder holder, int position) {
         holder.name.setText(map.get(uids.get(position)).name);
         holder.info.setText(map.get(uids.get(position)).info);
-        Glide.with(holder.itemView.getContext()).load(FirebaseStorage.getInstance().getReference(uids.get(position)).child("1")).into(holder.image);
+        FirebaseStorage.getInstance().getReference(uids.get(position)).child("1").getDownloadUrl().addOnCompleteListener(task -> {
+            Glide.with(holder.itemView.getContext()).load(task.getResult()).into(holder.image);
+        });
         holder.itemView.setOnClickListener(v -> listener.onClick(uids.get(position)));
     }
 

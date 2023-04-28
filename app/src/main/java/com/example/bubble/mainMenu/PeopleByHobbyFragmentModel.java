@@ -37,8 +37,8 @@ public class PeopleByHobbyFragmentModel {
         });
 
         data.observe(fragment.getViewLifecycleOwner(), stringUserInfoJSONMap -> {
-            adapter.setValue(new PeopleListRecyclerView(uids.getValue(), data.getValue(), (PeopleListRecyclerView.OnItemClickListener) uid -> {
-                if (uid!= FirebaseAuth.getInstance().getUid()){
+            adapter.setValue(new PeopleListRecyclerView(uids.getValue(), data.getValue(), uid -> {
+                if (!uid.equals(FirebaseAuth.getInstance().getUid())){
                     replaceFragment(fragment, new UserProfileFragment(uid));
                 }
                 else{

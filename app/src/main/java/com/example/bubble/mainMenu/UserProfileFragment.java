@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -26,6 +28,7 @@ public class UserProfileFragment extends Fragment {
 
     FragmentUserProfileBinding binding;
     String uid;
+    UserInfoJSON userInfo;
     ProfilePictureRecyclerView adapter;
     ProfileFragmentViewModel viewModel;
 
@@ -129,10 +132,17 @@ public class UserProfileFragment extends Fragment {
             viewModel.addFriendButton(requireContext());
         });
 
+        binding.messageButton.setOnClickListener(v -> {
+            replaceFragment();
+        });
+
         return binding.getRoot();
     }
 
+
+
     public void displayInfo(UserInfoJSON user){
+        userInfo = user;
         Calendar today = Calendar.getInstance();
         int year = today.get(Calendar.YEAR)- user.dateOfBirth.year;
         if ((user.dateOfBirth.month>(today.get(Calendar.MONTH)+1)) ||((user.dateOfBirth.month==today.get(Calendar.MONTH) && user.dateOfBirth.day>today.get(Calendar.DAY_OF_MONTH))) ){
@@ -140,6 +150,13 @@ public class UserProfileFragment extends Fragment {
         }
         binding.name.setText(user.name+", "+String.valueOf(year));
         binding.info.setText(user.info);
+    }
+
+    private void replaceFragment() {
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment, new MessageFragment(uid,userInfo)).addToBackStack(null);
+            fragmentTransaction.commit();
     }
 
 }

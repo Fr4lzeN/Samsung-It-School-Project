@@ -1,5 +1,6 @@
 package com.example.bubble.JSON;
 
+import android.net.Uri;
 import android.widget.ImageView;
 
 public class UserInfoJSON {

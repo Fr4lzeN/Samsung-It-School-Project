@@ -6,7 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.bubble.JSON.MessageJSON;
+import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.JSON.UserInfoJSON;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +31,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import io.reactivex.subjects.PublishSubject;
 
 public class FirebaseActions {
 
@@ -119,8 +125,10 @@ public class FirebaseActions {
     }
 
 
-    public static void downloadPicture(FirebaseUser user, MutableLiveData<StorageReference> picture) {
-       picture.setValue(FirebaseStorage.getInstance().getReference(user.getUid()).child("1"));
+    public static void downloadPicture(String uid, MutableLiveData<Uri> picture) {
+       FirebaseStorage.getInstance().getReference(uid).child("1").getDownloadUrl().addOnCompleteListener(task -> {
+           picture.setValue(task.getResult());
+       });
     }
 
     public static Task<ListResult> downloadPicture(String uid){
@@ -259,12 +267,75 @@ public class FirebaseActions {
         return Tasks.whenAll(tasks);
     }
 
+    public static void getUserMessages(String uid, PublishSubject<Map<String, String>> messageMap){
+        Map<String,String> map = new HashMap<>();
+           FirebaseDatabase.getInstance().getReference("userData").child(uid).child("chat").get().addOnCompleteListener(task -> {
+               if(task.getResult().getValue()!=null) {
+                   messageMap.onNext(task.getResult().getValue(new GenericTypeIndicator<Map<String, String>>() {
+                   }));
+               }else{
+                   messageMap.onComplete();
+               }
+            });
+    }
 
 
-    public static DatabaseReference findUserFriends(String uid) {
-         return FirebaseDatabase.getInstance()
-                .getReference("userData")
-                .child(uid)
-                .child("friendList");
+    public static void setMap(Map<String,String> map1, Map<String,String> map2){
+        map1 = map2;
+    }
+
+    public static void getMessagesList(Map<String, String> map, PublishSubject<MessageListItem> messageData){
+        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference("chat");
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("userData");
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        List<Task<Void>> allTasks = new ArrayList<>();
+        for (Map.Entry<String,String> i : map.entrySet()){
+            MessageListItem item = new MessageListItem();
+            item.messageId=i.getValue();
+            item.uid = i.getKey();
+            allTasks.add(Tasks.whenAll(
+                    chatReference.child(i.getValue()).limitToLast(1).get().addOnCompleteListener(task ->{
+                            Map<String,MessageJSON> tempMap = task.getResult().getValue(new GenericTypeIndicator<Map<String, MessageJSON>>() {});
+                            for (Map.Entry<String, MessageJSON> j : tempMap.entrySet()){
+                                item.message=j.getValue();
+                            }
+                    }),
+                    userReference.child(i.getKey()).child("userInfo").get().addOnCompleteListener(task ->
+                            item.setUserInfo(task.getResult().getValue(UserInfoJSON.class))),
+                    storageReference.child(i.getKey()).child("1").getDownloadUrl().addOnCompleteListener(task ->
+                            item.setPicture(task.getResult()))).addOnCompleteListener(task -> messageData.onNext(item)));
+        }
+        Tasks.whenAll(allTasks).addOnCompleteListener(task -> {
+            messageData.onComplete();
+        });
+    }
+
+    public static void sendMessage(String message, String messageId){
+        MessageJSON messageJSON = new MessageJSON(message, FirebaseAuth.getInstance().getUid());
+        FirebaseDatabase.getInstance().getReference("chat").child(messageId).updateChildren(Collections.singletonMap(String.valueOf(messageJSON.date), messageJSON));
+    }
+
+
+    public static void getMessageId(String uid, PublishSubject<String> messageSubject) {
+        FirebaseDatabase.getInstance().getReference("userData")
+                .child(FirebaseAuth.getInstance().getUid())
+                .child("chat").child(uid).get()
+                .addOnCompleteListener(task -> {
+                    if (task.getResult().getValue()!=null) {
+                        messageSubject.onNext(task.getResult().getValue(String.class));
+                    }
+                    messageSubject.onComplete();
+        });
+    }
+
+    public static void createMessageId(String uid, PublishSubject<String> messageSubject) {
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("userData");
+        String key = userReference.push().getKey();
+        String mUid = FirebaseAuth.getInstance().getUid();
+        Tasks.whenAll(userReference.child(mUid).child("chat").child(uid).setValue(key),
+                userReference.child(uid).child("chat").child(mUid).setValue(key))
+                .addOnCompleteListener(task -> {
+                    FirebaseActions.getMessageId(uid,messageSubject);
+                });
     }
 }

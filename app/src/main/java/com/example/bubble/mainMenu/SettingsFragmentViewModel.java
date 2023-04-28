@@ -1,5 +1,7 @@
 package com.example.bubble.mainMenu;
 
+import android.net.Uri;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,7 +15,7 @@ import java.util.List;
 public class SettingsFragmentViewModel extends ViewModel {
 
     public MutableLiveData<FirebaseUser> user = new MutableLiveData<>(FirebaseAuth.getInstance().getCurrentUser());
-    public MutableLiveData<StorageReference> picture = new MutableLiveData<>();
+    public MutableLiveData<Uri> picture = new MutableLiveData<>();
 
     public void downloadPicture(){
         SettingsFragmentModel.downloadPicture(user, picture);

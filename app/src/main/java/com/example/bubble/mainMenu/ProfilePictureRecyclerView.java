@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bubble.databinding.ProfilePictureItemListBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,7 +36,10 @@ public class ProfilePictureRecyclerView extends RecyclerView.Adapter<ProfilePict
 
     @Override
     public void onBindViewHolder(@NonNull PictureHolder holder, int position) {
-        Glide.with(holder.itemView.getContext()).load(data.get(position)).into(holder.image);
+        data.get(position).getDownloadUrl().addOnCompleteListener(task -> {
+            Glide.with(holder.itemView.getContext()).load(task.getResult()).into(holder.image);
+        });
+
     }
 
     @Override
