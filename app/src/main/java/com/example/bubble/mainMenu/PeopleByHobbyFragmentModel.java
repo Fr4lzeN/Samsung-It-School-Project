@@ -1,59 +1,56 @@
 package com.example.bubble.mainMenu;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.bubble.JSON.UserInfoJSON;
-import com.example.bubble.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.bubble.JSON.FriendInfo;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
 public class PeopleByHobbyFragmentModel {
-    public static void getUsersByHobby(int start, int end, ArrayList<String> uids, MutableLiveData<Map<String, UserInfoJSON>> data) {
 
-    }
 
-    public static void getUids(MutableLiveData<List<String>> uids, String hobby) {
-        FirebaseActions.getUserUidByHobby(hobby, uids);
-    }
+    @SuppressLint("CheckResult")
+    public static ArrayList<Disposable> getUsers(String hobby, MutableLiveData<ArrayList<FriendInfo>> data) {
 
-    public static void getUserByUid(List<String> uids, MutableLiveData<Map<String, UserInfoJSON>> data) {
-        FirebaseActions.downloadUserInfo(uids, data);
-    }
+        PublishSubject<String>  uid = PublishSubject.create();
+        PublishSubject<FriendInfo> userData = PublishSubject.create();
+        FirebaseActions.getUserUidByHobby(hobby, uid);
 
-    public static void getData(Fragment fragment, String hobby, MutableLiveData<List<String>> uids, MutableLiveData<Map<String, UserInfoJSON>> data, MutableLiveData<PeopleListRecyclerView> adapter) {
-
-        getUids(uids, hobby);
-
-        uids.observe(fragment.getViewLifecycleOwner(), strings -> {
-            if (strings!=null){
-                getUserByUid(uids.getValue(), data);
-            }
-        });
-
-        data.observe(fragment.getViewLifecycleOwner(), stringUserInfoJSONMap -> {
-            adapter.setValue(new PeopleListRecyclerView(uids.getValue(), data.getValue(), uid -> {
-                if (!uid.equals(FirebaseAuth.getInstance().getUid())){
-                    replaceFragment(fragment, new UserProfileFragment(uid));
+        Disposable uidDisposable = uid.subscribe(
+                userUid->{
+                    FirebaseActions.getUser(userUid, userData);
                 }
-                else{
-                    replaceFragment(fragment, new MyProfileFragment());
+        );
+
+       Disposable userDisposable = userData.subscribe(
+                user->{
+                    ArrayList<FriendInfo> temp = new ArrayList<>();
+                    if (data.getValue()!=null)
+                        temp = data.getValue();
+                    temp.add(user);
+                    data.setValue(temp);
                 }
-            }));
-        });
+        );
 
+       ArrayList<Disposable> disposables = new ArrayList<>();
+       disposables.add(uidDisposable);
+       disposables.add(userDisposable);
+       return disposables;
     }
 
-    private static void replaceFragment(Fragment current, Fragment next) {
-        FragmentManager fragmentManager = current.getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, next).addToBackStack(null);
-        fragmentTransaction.commit();
+    public static void disableDisposables(ArrayList<Disposable> disposables) {
+        for (Disposable i : disposables){
+            i.dispose();
+        }
+        disposables = new ArrayList<>();
     }
 
+    public static void deleteListeners(String hobby) {
+        FirebaseActions.userUidByHobbyDelete(hobby);
+    }
 }

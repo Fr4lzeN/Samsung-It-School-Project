@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,18 +18,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentFriendsBinding;
+
+import java.util.List;
 
 public class FriendsFragment extends Fragment {
 
     FragmentFriendsBinding binding;
-    FriendsFragmentViewModel viewModel;
+
 
     String friend = "Друзья";
     String incoming = "Входящие запросы";
     String outgoing = "Исходящие запросы";
+    Boolean firstOpened;
 
+    public FriendsFragment() {
+        firstOpened=true;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,35 +49,55 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater,container, false);
         Log.d("Functions", "onCreateView");
 
-        viewModel = new ViewModelProvider(this).get(FriendsFragmentViewModel.class);
 
         binding.friendsTextView.setText(friend+" (0)");
         binding.incomingRequestsTextView.setText(incoming+" (0)");
         binding.outgoingRequestsTextView.setText(outgoing+" (0)");
 
-        viewModel.createAdapters(this);
 
-        viewModel.friendsAdapter.observe(getViewLifecycleOwner(), peopleListRecyclerView -> {
-            if (peopleListRecyclerView!=null) {
+        MainActivity.getViewModel().friends.observe(getViewLifecycleOwner(), friendInfos -> {
+            if (friendInfos!=null) {
+                PeopleListRecyclerView adapter = new PeopleListRecyclerView(friendInfos, uid ->
+                        replaceFragment(new UserProfileFragment(uid)));
                 binding.friendsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-                binding.friendsRecyclerView.setAdapter(peopleListRecyclerView);
-                binding.friendsTextView.setText(friend + " (" + peopleListRecyclerView.getItemCount() + ")");
+                binding.friendsRecyclerView.setAdapter(adapter);
+                binding.friendsTextView.setText(friend+" ("+friendInfos.size()+")");
             }
         });
 
-        viewModel.incomingAdapter.observe(getViewLifecycleOwner(), peopleListRecyclerView -> {
-            if (peopleListRecyclerView!=null) {
+        MainActivity.getViewModel().incomingRequests.observe(getViewLifecycleOwner(), friendInfos -> {
+            if (friendInfos!=null) {
+                PeopleListRecyclerView adapter = new PeopleListRecyclerView(friendInfos, uid ->
+                        replaceFragment(new UserProfileFragment(uid)));
                 binding.incomingRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-                binding.incomingRequestsRecyclerView.setAdapter(peopleListRecyclerView);
-                binding.incomingRequestsTextView.setText(incoming + " (" + peopleListRecyclerView.getItemCount() + ")");
+                binding.incomingRequestsRecyclerView.setAdapter(adapter);
+                binding.incomingRequestsTextView.setText(incoming+" ("+friendInfos.size()+")");
             }
         });
 
-        viewModel.outcomingAdapter.observe(getViewLifecycleOwner(), peopleListRecyclerView -> {
-            if (peopleListRecyclerView!=null) {
+        MainActivity.getViewModel().outgoingRequests.observe(getViewLifecycleOwner(), friendInfos -> {
+            if (friendInfos!=null) {
+                PeopleListRecyclerView adapter = new PeopleListRecyclerView(friendInfos, uid ->
+                        replaceFragment(new UserProfileFragment(uid)));
                 binding.outgoingRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-                binding.outgoingRequestsRecyclerView.setAdapter(peopleListRecyclerView);
-                binding.outgoingRequestsTextView.setText(outgoing + " (" + peopleListRecyclerView.getItemCount() + ")");
+                binding.outgoingRequestsRecyclerView.setAdapter(adapter);
+                binding.outgoingRequestsTextView.setText(outgoing+" ("+friendInfos.size()+")");
+            }
+        });
+
+        MainActivity.getViewModel().friendRecyclerIsClicked.observe(getViewLifecycleOwner(), clicked -> {
+            if (clicked){
+                binding.friendsTextView.callOnClick();
+            }
+        });
+        MainActivity.getViewModel().incomingRecyclerIsClicked.observe(getViewLifecycleOwner(), clicked -> {
+            if (clicked){
+                binding.incomingRequestsTextView.callOnClick();
+            }
+        });
+        MainActivity.getViewModel().outgoingRecyclerIsClicked.observe(getViewLifecycleOwner(), clicked -> {
+            if (clicked){
+                binding.outgoingRequestsTextView.callOnClick();
             }
         });
 
@@ -101,45 +134,19 @@ public class FriendsFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Functions", "onCreate");
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d("Functions", "onViewCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("Functions", "onStart");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("Functions", "onPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("Functions", "onResume");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("Functions", "onDestroyView");
+    private void replaceFragment(Fragment next) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, next).addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("Functions", "onDestroy");
+        Boolean friendState = binding.friendsRecyclerView.getVisibility()==View.VISIBLE;
+        Boolean incomingState = binding.incomingRequestsRecyclerView.getVisibility()==View.VISIBLE;
+        Boolean outgoingState = binding.outgoingRequestsRecyclerView.getVisibility()==View.VISIBLE;
+        MainActivity.viewModel.setRecyclerState(friendState,incomingState,outgoingState);
     }
 }

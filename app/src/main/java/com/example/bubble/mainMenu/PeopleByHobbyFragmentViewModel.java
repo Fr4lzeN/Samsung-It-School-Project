@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.R;
 
@@ -16,17 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.disposables.Disposable;
+
 public class PeopleByHobbyFragmentViewModel extends ViewModel {
 
-    MutableLiveData<List<String>> uids = new MutableLiveData<>();
-    MutableLiveData<Map<String, UserInfoJSON>> data = new MutableLiveData<>();
-    MutableLiveData<PeopleListRecyclerView> adapter = new MutableLiveData<>();
-    Fragment fragment;
+    MutableLiveData<ArrayList<FriendInfo>> data = new MutableLiveData<>();
+    String hobby;
+    ArrayList<Disposable> disposables;
 
-    public void createAdapter(Fragment fragment, String hobby){
-        this.fragment=fragment;
-        PeopleByHobbyFragmentModel.getData(fragment, hobby, uids, data, adapter);
+    public void getUsers(){
+        disposables = PeopleByHobbyFragmentModel.getUsers(hobby, data);
+    }
 
+    public  void setHobby(String hobby){
+        this.hobby = hobby;
+    }
+
+    public void disable(){
+        PeopleByHobbyFragmentModel.disableDisposables(disposables);
+        PeopleByHobbyFragmentModel.deleteListeners(hobby);
     }
 
 }

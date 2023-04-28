@@ -35,12 +35,26 @@ public class PeopleByHobbyFragment extends Fragment {
         binding = FragmentPeopleByHobbyBinding.inflate(inflater,container, false);
         viewModel = new ViewModelProvider(this).get(PeopleByHobbyFragmentViewModel.class);
         binding.textView.setText(hobby);
-        viewModel.createAdapter(this, hobby);
-        viewModel.adapter.observe(getViewLifecycleOwner(), adapter -> {
+        viewModel.setHobby(hobby);
+        viewModel.getUsers();
+        viewModel.data.observe(getViewLifecycleOwner(), friendInfoArrayList -> {
+            PeopleListRecyclerView adapter = new PeopleListRecyclerView(friendInfoArrayList, uid -> {
+                if (uid.equals(MainActivity.getViewModel().getUid()))
+                    replaceFragment(new MyProfileFragment());
+                else
+                    replaceFragment(new UserProfileFragment(uid));
+            });
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
             binding.recyclerView.setAdapter(adapter);
         });
         return binding.getRoot();
+    }
+
+    public void replaceFragment(Fragment next) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, next).addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
 }

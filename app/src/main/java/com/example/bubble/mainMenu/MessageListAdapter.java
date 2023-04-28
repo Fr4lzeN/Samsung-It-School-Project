@@ -1,5 +1,6 @@
 package com.example.bubble.mainMenu;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,14 +44,19 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         Glide.with(holder.itemView.getContext()).load(data.get(position).picture).into(holder.image);
         holder.name.setText(data.get(position).userInfo.name);
         String author;
-        if (data.get(position).message.uid.equals(FirebaseAuth.getInstance().getUid())){
-            author = "Вы: ";
+        try {
+            if (data.get(position).message.uid.equals(FirebaseAuth.getInstance().getUid())) {
+                author = "Вы: ";
+            } else {
+                author = data.get(position).userInfo.name + ": ";
+            }
+            holder.message.setText(author + data.get(position).message.message);
+            holder.itemView.setOnClickListener(v -> listener.onItemClick(data.get(position).userInfo, data.get(position).messageId, data.get(position).uid));
+        }catch (java.lang.NullPointerException t){
+            Log.d("Error", data.get(position).toString());
+            Log.d("Error", t.toString());
+
         }
-        else{
-            author =data.get(position).userInfo.name+": ";
-        }
-        holder.message.setText(author+data.get(position).message.message);
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(data.get(position).userInfo, data.get(position).messageId, data.get(position).uid));
     }
 
     @Override

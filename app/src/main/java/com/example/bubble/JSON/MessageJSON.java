@@ -16,4 +16,8 @@ public class MessageJSON {
 
     public MessageJSON() {
     }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
 }

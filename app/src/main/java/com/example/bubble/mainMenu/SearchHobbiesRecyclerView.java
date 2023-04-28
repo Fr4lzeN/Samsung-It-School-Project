@@ -1,32 +1,68 @@
 package com.example.bubble.mainMenu;
 
+import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bubble.databinding.SearchHobbyItemListBinding;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class SearchHobbiesRecyclerView extends RecyclerView.Adapter<SearchHobbiesRecyclerView.SearchHobbiesViewHolder> {
+public class SearchHobbiesRecyclerView extends RecyclerView.Adapter<SearchHobbiesRecyclerView.SearchHobbiesViewHolder> implements Filterable {
+
 
     public  interface OnItemClick {
         void onClick(String hobby);
     }
 
     SearchHobbyItemListBinding binding;
-    ArrayList<String> data = new ArrayList<>(Arrays.asList("Автомобили", "Ароматерапия", "Астрономия", "Аэробика", "Аэрография", "Бадминтон", "Батик", "Батут", "Бег", "Бильярд", "Блоггерство", "Бодиарт", "Боевые искусства", "Бонсай", "Боулинг", "Велосипед", "Видеомонтаж", "Выращивание кристаллов", "Садоводство", "Вязание", "Гербарий", "Головоломки", "Гольф", "Горные лыжи", "Граффити", "Дайвинг", "Дартс", "Декупаж", "Дерево (выжигание и резьба)", "Диггерство", "Дизайн", "Животны", "Жонглирование", "Зентангл", "Музыка", "Игрушки и куклы", "Игры", "Кузнечное дело", "Программирование", "Икебана", "Иностранные языки", "Йога", "Исторические реконструкции", "Кайтинг", "Каллиграфия", "Карвинг", "Картинг и квадроциклы", "Квест-комнаты", "Кладоискательство", "Клубный отдых", "Коллекционирование", "Графика", "Коньки и ролики", "Косплей", "Кроссворды", "Кулинария", "Лазертаг", "Лепка", "Лошади (верховая езда, уход)", "Лыжи", "Массаж", "Моделирование", "Музеи и выставки", "Мыловарение", "Настольные игры", "Оригами", "Охота", "Паззлы", "Парашютный спорт", "Паркур", "Пейнтбол", "Пение и караоке", "Петанк", "Пикап", "Пилатес", "Писательсво", "Плавание", "Плетение", "Учеба", "Предпринимательство", "Психология и тренинги", "Путешествия", "Пчеловодство", "Радиовещание", "Рисование", "Робототехника", "Рукоделие", "Рыбалка", "Серфинг", "Силовые тренировки", "Скейтборд", "Скрапбукинг", "Сноуборд", "Спорт", "Страйкбол", "Стрельба", "Танцы", "Татуировки и пирсинг", "Театр", "Теннис", "Файер-шоу", "Фейерверки", "Фокусы", "Фотография и фотокниги", "Футбол", "Шитье и вышивание"));
-
+    ArrayList<String> data;
+    ArrayList<String> searchData;
     OnItemClick listener;
 
-    public SearchHobbiesRecyclerView(OnItemClick listener) {
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<String> filtered = new ArrayList<>();
+            if (TextUtils.isEmpty(constraint)){
+                filtered.addAll(data);
+            }else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (String i : data){
+                    if (i.toLowerCase().contains(filterPattern)){
+                        filtered.add(i);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values=filtered;
+            return  results;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            searchData.clear();
+            searchData.addAll((ArrayList)results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public SearchHobbiesRecyclerView(ArrayList<String> data, OnItemClick listener) {
+        this.data = data;
         this.listener = listener;
+        this.searchData = new ArrayList<>(data);
     }
 
     @NonNull
@@ -38,14 +74,21 @@ public class SearchHobbiesRecyclerView extends RecyclerView.Adapter<SearchHobbie
 
     @Override
     public void onBindViewHolder(@NonNull SearchHobbiesViewHolder holder, int position) {
-        holder.textView.setText(data.get(position));
-        holder.onBind(data.get(position));
+        holder.textView.setText(searchData.get(position));
+        holder.onBind(searchData.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return searchData.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+
 
     public class SearchHobbiesViewHolder extends RecyclerView.ViewHolder{
 

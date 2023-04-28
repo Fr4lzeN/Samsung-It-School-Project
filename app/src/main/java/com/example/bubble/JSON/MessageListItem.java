@@ -2,6 +2,8 @@ package com.example.bubble.JSON;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.storage.StorageReference;
 
 public class MessageListItem {
@@ -11,6 +13,13 @@ public class MessageListItem {
     public Uri picture;
 
     public String messageId;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return messageId+" "+uid;
+    }
+
     public String uid;
 
     public void setPicture(Uri picture) {

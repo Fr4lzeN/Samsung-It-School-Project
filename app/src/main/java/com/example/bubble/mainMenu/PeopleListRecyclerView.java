@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.databinding.PeopleListItemListBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,15 +28,13 @@ public class PeopleListRecyclerView extends RecyclerView.Adapter<PeopleListRecyc
         void onClick(String uid);
     }
 
-    Map<String, UserInfoJSON> map;
-    List<String> uids;
+    List<FriendInfo> data;
     OnItemClickListener listener;
     PeopleListItemListBinding binding;
 
-    public PeopleListRecyclerView(List<String> uids, Map<String,UserInfoJSON> map , OnItemClickListener listener) {
+    public PeopleListRecyclerView(List<FriendInfo> data, OnItemClickListener listener) {
+        this.data = data;
         this.listener = listener;
-        this.uids=uids;
-        this.map=map;
     }
 
     @NonNull
@@ -47,17 +46,15 @@ public class PeopleListRecyclerView extends RecyclerView.Adapter<PeopleListRecyc
 
     @Override
     public void onBindViewHolder(@NonNull PeopleListViewHolder holder, int position) {
-        holder.name.setText(map.get(uids.get(position)).name);
-        holder.info.setText(map.get(uids.get(position)).info);
-        FirebaseStorage.getInstance().getReference(uids.get(position)).child("1").getDownloadUrl().addOnCompleteListener(task -> {
-            Glide.with(holder.itemView.getContext()).load(task.getResult()).into(holder.image);
-        });
-        holder.itemView.setOnClickListener(v -> listener.onClick(uids.get(position)));
+        holder.name.setText(data.get(position).getUserData().name);
+        holder.info.setText(data.get(position).getUserData().info);
+        Glide.with(holder.itemView.getContext()).load(data.get(position).getPicture()).into(holder.image);
+        holder.itemView.setOnClickListener(v -> listener.onClick(data.get(position).getUid()));
     }
 
     @Override
     public int getItemCount() {
-        return map.size();
+        return data.size();
     }
 
     public class PeopleListViewHolder extends RecyclerView.ViewHolder{

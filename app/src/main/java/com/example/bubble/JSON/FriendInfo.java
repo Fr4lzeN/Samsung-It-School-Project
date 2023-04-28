@@ -1,0 +1,41 @@
+package com.example.bubble.JSON;
+
+import android.net.Uri;
+
+public class FriendInfo {
+
+    UserInfoJSON userData;
+    String uid;
+    Uri picture;
+
+    public FriendInfo(String uid) {
+        this.uid = uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public FriendInfo() {
+    }
+
+    public void setUserData(UserInfoJSON userData) {
+        this.userData = userData;
+    }
+
+    public void setPicture(Uri picture) {
+        this.picture = picture;
+    }
+
+    public Uri getPicture() {
+        return picture;
+    }
+
+    public UserInfoJSON getUserData() {
+        return userData;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+}

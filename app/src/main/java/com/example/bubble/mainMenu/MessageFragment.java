@@ -3,6 +3,8 @@ package com.example.bubble.mainMenu;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,12 +18,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentMessageBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MessageFragment extends Fragment {
 
@@ -40,8 +47,6 @@ public class MessageFragment extends Fragment {
             openProfileFragment(uid);
         }
     };
-
-
 
     public MessageFragment(String uid, UserInfoJSON userData, String messageId) {
         this.uid = uid;
