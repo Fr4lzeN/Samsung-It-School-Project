@@ -54,9 +54,7 @@ public class SettingsFragment extends Fragment {
             replaceFragment(new MyProfileFragment());
         });
 
-        binding.editProfileButton.setOnClickListener(v -> {
-            replaceFragment(new ProfileEditFragment());
-        });
+
 
         binding.editProfileText.setOnClickListener(v -> {
             dialogProfile = new EditProfileInfoFragmentDialog(() -> viewModel.refreshUser());

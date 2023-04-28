@@ -40,11 +40,6 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/profileEditFragment"
-        android:name="com.example.bubble.ProfileEditFragment"
-        android:label="fragment_profile_edit"
-        tools:layout="@layout/fragment_profile_edit" />
-    <fragment
         android:id="@+id/peopleByHobbyFragment"
         android:name="com.example.bubble.mainMenu.PeopleByHobbyFragment"
         android:label="fragment_people_by_hobby"
