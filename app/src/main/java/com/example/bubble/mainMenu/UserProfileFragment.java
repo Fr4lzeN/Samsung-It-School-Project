@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.R;
-import com.example.bubble.databinding.FragmentMyProfileBinding;
 import com.example.bubble.databinding.FragmentUserProfileBinding;
 
 import java.util.Calendar;
@@ -111,7 +109,7 @@ public class UserProfileFragment extends Fragment {
                 }
         });
         viewModel.friendStatus.observe(getViewLifecycleOwner(), friendStatus -> {
-            if (friendStatus==null || friendStatus == FriendStatus.NO_STATUS){
+            if (friendStatus==null || friendStatus == FriendStatusEnum.NO_STATUS){
                 binding.addFriendButton.setText("Добавить в друзья");
             }else {
                 switch (friendStatus) {

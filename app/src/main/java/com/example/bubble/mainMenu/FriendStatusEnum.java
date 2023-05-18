@@ -1,6 +1,6 @@
 package com.example.bubble.mainMenu;
 
-public enum FriendStatus {
+public enum FriendStatusEnum {
     FRIENDS,
     OUTGOING_REQUEST,
     INCOMING_REQUEST,

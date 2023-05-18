@@ -1,117 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".registration.HobbyFragment"
-    android:padding="16dp">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/header"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintEnd_toEndOf="@id/description"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Дополни свою анкету"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        style="@style/HeaderText.Large"
+        android:gravity="center"
+        android:layout_marginTop="64dp"/>
+
     <TextView
         android:id="@+id/description"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Сейчас тебе надо лишь указать свой пол и выбрать увлечения из списка ниже"
+        android:text="Сейчас тебе надо лишь выбрать увлечения из списка ниже"
         android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8" />
+        style="@style/TitleText.Medium"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
 
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/description"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
-        android:orientation="horizontal"
-        android:animateLayoutChanges="false">
-
-        <RadioButton
-            android:id="@+id/male"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:layout_height="wrap_content"
-            android:text="@string/male"
-            android:button="@android:color/transparent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:textColor="@drawable/radio_button_text_selector"/>
-        <RadioButton
-            android:id="@+id/female"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/female"
-            android:button="@android:color/transparent"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:textColor="@drawable/radio_button_text_selector"/>
+            style="@style/FilledEditText"
+            android:hint="Хобби"
+            app:startIconDrawable="@drawable/search_vector"
+            app:endIconMode="clear_text"
+            app:endIconDrawable="@drawable/clear">
 
-        <RadioButton
-            android:id="@+id/other"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@android:color/transparent"
-            android:gravity="center"
-            android:text="@string/other_gender"
-            android:textSize="22sp"
-            android:textColor="@drawable/radio_button_text_selector"/>
-    </RadioGroup>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textSize="@dimen/body_large" />
 
+        </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="16dp"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nextButton"
-        app:spanCount="19"
-        />
+        android:layout_height="400dp" />
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/button_primary"
+                android:text="Назад"
+                android:textSize="@dimen/body_large"
+                app:backgroundTint="?attr/colorTertiary"
+                android:layout_weight="1"
+                android:layout_marginEnd="32dp"/>
 
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Далее"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:backgroundTint="@color/purple_500"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/button_primary"
+                android:enabled="false"
+                android:text="Продолжить"
+                android:textSize="@dimen/body_large"
+                android:layout_weight="1"/>
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Назад"
-        android:backgroundTint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="18sp"/>
+        </LinearLayout>
 
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

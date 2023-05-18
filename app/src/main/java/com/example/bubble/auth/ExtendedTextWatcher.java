@@ -2,7 +2,6 @@ package com.example.bubble.auth;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 
 public abstract class ExtendedTextWatcher implements TextWatcher{
@@ -13,8 +12,7 @@ public abstract class ExtendedTextWatcher implements TextWatcher{
 
     public  void onTextChanged(CharSequence s, int start, int before, int count){};
 
-    public ExtendedTextWatcher(View v) {
-        view = v;
+    public ExtendedTextWatcher() {
     }
 
     public View getView() {

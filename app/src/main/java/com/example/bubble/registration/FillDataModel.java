@@ -1,88 +1,66 @@
 package com.example.bubble.registration;
 
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.bubble.JSON.UserInfoJSON;
-import com.example.bubble.PictureActions;
-import com.example.bubble.R;
 import com.example.bubble.mainMenu.FirebaseActions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FillDataModel {
 
-    public final static int changePicture = 1;
-    final static int addPicture = 0;
-    static PictureActions pictureActions;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    DatabaseReference database;
+    StorageReference storage;
+    ArrayList<String> hobby;
+    ArrayList<Boolean> checked;
 
-    public static Uri createAdapterData(Activity activity) {
-        pictureActions = new PictureActions(activity);
-        return new Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(activity.getResources().getResourcePackageName(R.drawable.add_picture))
-                .appendPath(activity.getResources().getResourceTypeName(R.drawable.add_picture))
-                .appendPath(activity.getResources().getResourceEntryName(R.drawable.add_picture))
-                .build();
+    public FillDataModel() {
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = FirebaseDatabase.getInstance().getReference();
+        storage = FirebaseStorage.getInstance().getReference();
     }
 
-    public static TakePictureRecyclerView createAdapter(List<Uri> data){
-        TakePictureRecyclerView adapter = new TakePictureRecyclerView(data, listener );
-        pictureActions.setAdapter(adapter);
-        return adapter;
+    public void createHobbyAdapter(MutableLiveData<HobbyRecyclerView> hobbiesAdapter, MutableLiveData<Boolean> chipChecked) {
+
+        FirebaseActions.getHobbyList().addOnCompleteListener(task -> {
+            hobby=task.getResult().getValue(new GenericTypeIndicator<ArrayList<String>>() {});
+            checked = new ArrayList<>(Collections.nCopies(hobby.size(),false));
+            hobbiesAdapter.setValue(new HobbyRecyclerView(hobby, checked, chipChecked::setValue));
+        });
+
     }
 
-    static TakePictureRecyclerView.OnItemClickListener listener = (data, position) -> {
-        if (position==addPicture){
-            pictureActions.createIntent(position, addPicture);
-        }
-        else{
-            pictureActions.Dialog(position);
-        }
-    };
-
-    public static List<Uri> addPictureToAdapter(Intent data) {
-        pictureActions.add(data);
-        return pictureActions.getData();
+    public Task<Void> createUser(String name, String info, String gender, Integer[] dateOfBirth) {
+        UserInfoJSON userInfoJSON = new UserInfoJSON(name, info, gender, dateOfBirth[2],dateOfBirth[1],dateOfBirth[0]);
+        return FirebaseActions.createUserDatabase(database, user.getUid(), userInfoJSON);
     }
 
-    public static List<Uri> changeAdapterPicture(Intent data, int position) {
-        pictureActions.change(data,position%10);
-        return pictureActions.getData();
+    public Task<Void> changeUserProfilePicture(String name, Uri uri) {
+        return FirebaseActions.updateUserProfile(user, name, uri);
     }
 
-    public static Task<Void> createUser(FirebaseUser user, String name, List<Uri> data) {
-        return FirebaseActions.updateUserProfile(user, name, data.get(1));
+    public Task<Void> uploadUserPictures(List<Uri> uris) {
+       return FirebaseActions.uploadUserPictures(storage, user.getUid(), uris);
     }
 
-    public static Task<Void> createUserDB(DatabaseReference database, String uid, String name, String info, String gender, Integer[] dateOfBirth) {
-        return FirebaseActions.createUserDatabase(database, uid, new UserInfoJSON(name, info, gender, dateOfBirth[0], dateOfBirth[1], dateOfBirth[2]));
+    public Task<Void> uploadHobby(){
+        return FirebaseActions.setHobbies(hobby,checked);
     }
 
-    public static List<UploadTask> sendPictures(StorageReference storage, String uid, List<Uri> data) {
-        return FirebaseActions.uploadPictures(storage, uid, data.subList(1, data.size()));
-    }
-
-    public static FirebaseResultEnum checkSuccess(List<Boolean> results, List<Uri> data) {
-        if (results.size()!=data.size()+1) return  FirebaseResultEnum.WAITING;
-        for (boolean i : results){
-            if (!i) return FirebaseResultEnum.FAILTURE;
-        }
-        return FirebaseResultEnum.SUCCESS;
-    }
-
-    public static List<Uri> deleteAdapterPicture(int position) {
-        return pictureActions.delete(position);
-    }
-
-    public static void setHobbies(List<String> hobbies, List<Boolean> checked) {
-        FirebaseActions.setHobbies(hobbies, checked);
-    }
 }

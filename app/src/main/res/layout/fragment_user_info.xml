@@ -1,88 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".registration.UserInfoFragment">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/header"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Расскажи о себе"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/description"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="В этом нет ничего сложного. Просто укажи своё имя, составь описание своей анкеты и не забудь указать дату рождения."
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8" />
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/info"
-        app:layout_constraintEnd_toEndOf="@id/description"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="20dp"
-        android:textSize="20sp"
-        android:hint="Имя"/>
-
-    <EditText
-        android:id="@+id/info"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/dateOfBirth"
-        app:layout_constraintEnd_toEndOf="@id/description"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintTop_toBottomOf="@id/name"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:hint="Информация в анкете"
-        android:gravity="bottom"
-        android:textSize="20sp"/>
-
-    <EditText
-        android:id="@+id/dateOfBirth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/description"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintTop_toBottomOf="@id/info"
-        android:layout_marginTop="20dp"
-        android:hint="Дата рождения"
-        android:textSize="20sp"
-        android:focusable="false"
-        android:inputType="none"/>
-
-    <Button
-        android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Далее"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/purple_500"
-        android:textSize="18sp"/>
+        android:layout_gravity="center"
+        android:text="Расскажи о себе"
+        android:textSize="@dimen/headline_large"
+        style="@style/HeaderText.Large"
+        android:layout_marginTop="64dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Тут ничего сложного, просто заполни несколько полей"
+        style="@style/TitleText.Medium"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Имя"
+        android:layout_marginTop="64dp"
+        style="@style/OutlinedEditText"
+        android:layout_gravity="center">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="@dimen/body_large"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:singleSelection="true"
+            app:singleLine="true"
+            app:chipSpacingHorizontal="9dp"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/maleChip"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Мужчина"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="@dimen/body_large"
+                style="@style/Widget.Material3.Chip.Suggestion"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/femaleChip"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Женщина"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="@dimen/body_large"
+                style="@style/Widget.Material3.Chip.Suggestion"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/unknownChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Не указан"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="@dimen/body_large"
+                style="@style/Widget.Material3.Chip.Suggestion"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/otherChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Свой вариант"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="@dimen/body_large"
+                style="@style/Widget.Material3.Chip.Suggestion"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/infoInputLayout"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint="О себе"
+        app:counterEnabled="true"
+        app:counterMaxLength="1000"
+        android:layout_gravity="center"
+        style="@style/OutlinedEditText">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:maxHeight="240dp"
+        android:maxLength="1000"
+        android:textSize="@dimen/body_large"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dateOfBirthInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="Дата рождения"
+        android:focusable="false"
+        android:inputType="none"
+        android:layout_gravity="center"
+        style="@style/OutlinedEditText">
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/dateOfBirth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/body_large"
+        android:editable="false"
+        android:focusable="false"
+       />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_primary"
+        style="@style/Widget.Material3.Button"
+        app:cornerRadius="20dp"
+        android:text="Продолжить"
+        app:layout_constraintStart_toStartOf="@id/dateOfBirthInputLayout"
+        app:layout_constraintEnd_toEndOf="@id/dateOfBirthInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/dateOfBirthInputLayout"
+        android:layout_marginTop="96dp"
+        android:textSize="@dimen/body_large"
+        android:layout_gravity="center"
+        android:enabled="false"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

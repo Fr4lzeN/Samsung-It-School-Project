@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/light_gray"
     tools:context=".SettingsFragment">
 
     <TextView
@@ -28,53 +27,82 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                android:background="@color/teal_200"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Name"
-                android:textSize="24sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp"/>
+                app:cardCornerRadius="20dp"
+                style="@style/Widget.Material3.CardView.Elevated"
+                android:layout_margin="16dp">
 
-            <TextView
-                android:id="@+id/phoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Phone number"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp">
 
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@color/teal_200"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/shapeImageRound"/>
 
-            <androidx.cardview.widget.CardView
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:text="Name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/headline_medium"
+                        app:layout_constraintBottom_toTopOf="@id/phoneNumberEditText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/profileImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/phoneNumberEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:text="Phone number"
+                        android:textSize="@dimen/title_large"
+                        app:layout_constraintBottom_toBottomOf="@id/profileImage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/profileImage"
+                        app:layout_constraintTop_toBottomOf="@id/name" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                style="@style/CardView.Dark"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="20dp"
+                style="@style/Widget.Material3.CardView.Elevated">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
+                    <ImageView
                         android:id="@+id/editProfileImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@color/teal_700"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/draw"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -86,17 +114,17 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/editProfileImage"
                         app:layout_constraintBottom_toBottomOf="@id/editProfileImage"
-                        android:text="Edit profile"
-                        android:textColor="@color/white"
+                        android:text="Изменить данные"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="22sp"/>
 
-                    <com.google.android.material.imageview.ShapeableImageView
+                    <ImageView
                         android:id="@+id/changeImagesImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/teal_700"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
+                        android:src="@drawable/baseline_photo_library_24"
+                        android:scaleType="centerInside"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/editProfileImage"/>
 
@@ -108,17 +136,18 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/changeImagesImage"
                         app:layout_constraintBottom_toBottomOf="@id/changeImagesImage"
-                        android:text="Change Images"
-                        android:textColor="@color/white"
+                        android:text="Поменять фото"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="22sp"/>
 
-                    <com.google.android.material.imageview.ShapeableImageView
+
+                    <ImageView
                         android:id="@+id/chooseHobbyImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/teal_700"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
+                        android:src="@drawable/hobby"
+                        android:scaleType="centerInside"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/changeImagesImage"/>
 
@@ -130,26 +159,29 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/chooseHobbyImage"
                         app:layout_constraintBottom_toBottomOf="@id/chooseHobbyImage"
-                        android:text="Choose hobby"
-                        android:textColor="@color/white"
+                        android:text="Выбрать хобби"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="22sp"/>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                style="@style/CardView.Dark"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="20dp"
+                style="@style/Widget.Material3.CardView.Elevated">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp">
+
+
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/nightModeImage"
@@ -164,9 +196,9 @@
                         android:id="@+id/nightModeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Night mode"
+                        android:text="Уведомления"
                         android:gravity="center"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/colorOnSurface"
                         app:layout_constraintStart_toEndOf="@id/nightModeImage"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="@id/nightModeImage"
@@ -199,9 +231,9 @@
                         app:layout_constraintTop_toTopOf="@id/notificationsImage"
                         app:layout_constraintBottom_toBottomOf="@id/notificationsImage"
                         app:layout_constraintEnd_toStartOf="@id/notificationSwitcher"
-                        android:text="Notification"
+                        android:text="Закрытый аккаунт"
                         android:textSize="22sp"
-                        android:textColor="@color/white"/>
+                        android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/notificationSwitcher"
@@ -230,9 +262,9 @@
                         app:layout_constraintTop_toTopOf="@id/privateImage"
                         app:layout_constraintBottom_toBottomOf="@id/privateImage"
                         app:layout_constraintEnd_toStartOf="@id/privateSwitcher"
-                        android:text="Private account"
+                        android:text="Написать нам"
                         android:textSize="22sp"
-                        android:textColor="@color/white"/>
+                        android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/privateSwitcher"
@@ -244,97 +276,16 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.cardview.widget.CardView
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                style="@style/CardView.Dark"
-                app:cardCornerRadius="20dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="16dp">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/securityImage"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/teal_700"/>
-
-                    <TextView
-                        android:id="@+id/securityText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/securityImage"
-                        app:layout_constraintTop_toTopOf="@id/securityImage"
-                        app:layout_constraintBottom_toBottomOf="@id/securityImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:text="@string/security_privacy"
-                        android:textSize="22sp"
-                        android:textColor="@color/white"/>
-
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/messageImage"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/securityImage"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/teal_200"/>
-
-                    <TextView
-                        android:id="@+id/messageText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/messageImage"
-                        app:layout_constraintTop_toTopOf="@id/messageImage"
-                        app:layout_constraintBottom_toBottomOf="@id/messageImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:text="Send us a message"
-                        android:textSize="22sp"
-                        android:textColor="@color/white"/>
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/FAQImage"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/messageImage"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/light_gray"/>
-
-                    <TextView
-                        android:id="@+id/FAQText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/FAQImage"
-                        app:layout_constraintTop_toTopOf="@id/FAQImage"
-                        app:layout_constraintBottom_toBottomOf="@id/FAQImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:text="FAQs"
-                        android:textSize="22sp"
-                        android:textColor="@color/white"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                style="@style/CardView.Dark"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="20dp"
+                style="@style/Widget.Material3.CardView.Elevated">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -358,13 +309,13 @@
                         app:layout_constraintBottom_toBottomOf="@id/logOutImage"
                         app:layout_constraintStart_toEndOf="@id/logOutImage"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:text="Log out"
-                        android:textColor="@color/white"
+                        android:text="Выйти из аккаунта"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="22sp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

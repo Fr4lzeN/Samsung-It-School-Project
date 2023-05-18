@@ -17,6 +17,9 @@ import java.util.List;
 public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRecyclerView.TakePictureViewHolder> {
 
 
+    public void setData(List<Uri> uris) {
+        data=uris;
+    }
 
     public interface OnItemClickListener{
         void onItemClick(Uri data, int position);
@@ -68,9 +71,6 @@ public class TakePictureRecyclerView extends  RecyclerView.Adapter<TakePictureRe
 
     @Override
     public void onBindViewHolder(@NonNull TakePictureViewHolder holder, int position) {
-        if (position==0 && getItemCount()==6){
-            holder.image.setVisibility(View.GONE);
-        }
         holder.bind(data.get(position), listener, position);
     }
 

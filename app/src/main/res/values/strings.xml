@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bubble</string>
+    <string name="app_name">Friended</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="female"><u>женщина</u></string>

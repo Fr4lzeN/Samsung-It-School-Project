@@ -38,11 +38,11 @@ public class ChangeHobbyFragmentDialogModel {
 
 
     public static void createAdapter(Activity activity, List<String> hobbyList, ArrayList<Boolean> hobbies, MutableLiveData<HobbyRecyclerView> adapter) {
-        adapter.setValue(new HobbyRecyclerView(activity, hobbyList, hobbies, (position, isChecked) -> {
+       /* adapter.setValue(new HobbyRecyclerView(activity, hobbyList, hobbies, (position, isChecked) -> {
             adapter.getValue().notifyItemChanged(position);
             Log.d("Hobby", hobbyList.get(position)+" "+position+" "+ isChecked);
             Log.d("Hobby", hobbies.get(position)+" "+position+" "+ isChecked);
-        }));
+        }));*/
     }
 
     public static void changeHobbies(List<String> hobbyList, ArrayList<Boolean> currentHobbies, MutableLiveData<Boolean> result) {

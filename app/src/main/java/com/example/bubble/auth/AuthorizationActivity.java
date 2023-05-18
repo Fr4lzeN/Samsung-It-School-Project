@@ -11,20 +11,14 @@ import com.example.bubble.databinding.ActivityAuthorizationBinding;
 
 public class AuthorizationActivity extends AppCompatActivity {
 
-    static AuthorizationActivityViewModel viewModel;
-
-    public static AuthorizationActivityViewModel getViewModel() {
-        return viewModel;
-    }
 
     ActivityAuthorizationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivityAuthorizationBinding.inflate(getLayoutInflater());
+        binding = ActivityAuthorizationBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        viewModel = new ViewModelProvider(this).get(AuthorizationActivityViewModel.class);
     }
 }

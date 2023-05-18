@@ -11,7 +11,6 @@ import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.JSON.MessageJSON;
 import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.JSON.UserInfoJSON;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +21,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -32,7 +29,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +96,24 @@ public class FirebaseActions {
         }
         return results;
     }
+
+    public static Task<Void> uploadUserPictures(StorageReference storage, String uid, List<Uri> data) {
+        List<UploadTask> results = new ArrayList<>();
+        for (int i=0; i<6; i++){
+            Log.d("Storage", "Picture sent "+i);
+            try {
+                results.add(storage.child(uid + "/" + (i + 1)).putFile(data.get(i)));
+            }
+            catch (Throwable t){
+                if (t instanceof java.lang.IndexOutOfBoundsException){
+                    storage.child(uid + "/" + (i + 1)).delete();
+                }
+            }
+
+        }
+        return Tasks.whenAll(results);
+    }
+
 
     public static void downloadUserInfo(String uid, MutableLiveData<UserInfoJSON> userInfo) {
         FirebaseDatabase.getInstance().getReference("userData").child(uid).child("userInfo").get().addOnCompleteListener(task -> {
@@ -202,8 +216,8 @@ public class FirebaseActions {
 
     public static Task<Void> acceptFriendRequest(String myUid, String userUid) {
         List<Task<Void>> tasks = new ArrayList<>();
-        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatus.FRIENDS.toString()));
-        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatus.FRIENDS.toString()));
+        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatusEnum.FRIENDS.toString()));
+        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatusEnum.FRIENDS.toString()));
         return Tasks.whenAll(tasks);
     }
 
@@ -216,8 +230,8 @@ public class FirebaseActions {
 
     public static Task<Void> sendFriendRequest(String myUid, String userUid) {
         List<Task<Void>> tasks = new ArrayList<>();
-        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatus.OUTGOING_REQUEST));
-        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatus.INCOMING_REQUEST));
+        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatusEnum.OUTGOING_REQUEST));
+        tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatusEnum.INCOMING_REQUEST));
         return Tasks.whenAll(tasks);
     }
 
@@ -331,7 +345,7 @@ public class FirebaseActions {
 
     }
 
-    public static void getFriends(String uid, PublishSubject<Map.Entry<FriendInfo, FriendStatus>> friendStatus, PublishSubject<Map.Entry<String,FriendStatus>> changeFriend, PublishSubject<Map.Entry<String,FriendStatus>> deleteFriend) {
+    public static void getFriends(String uid, PublishSubject<Map.Entry<FriendInfo, FriendStatusEnum>> friendStatus, PublishSubject<Map.Entry<String, FriendStatusEnum>> changeFriend, PublishSubject<Map.Entry<String, FriendStatusEnum>> deleteFriend) {
         friendListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -344,18 +358,18 @@ public class FirebaseActions {
                 });
 
                 Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
-                    friendStatus.onNext(new AbstractMap.SimpleEntry<>(friend,snapshot.getValue(FriendStatus.class)));
+                    friendStatus.onNext(new AbstractMap.SimpleEntry<>(friend,snapshot.getValue(FriendStatusEnum.class)));
                 });
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                changeFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(),snapshot.getValue(FriendStatus.class)));
+                changeFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(),snapshot.getValue(FriendStatusEnum.class)));
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                deleteFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(), snapshot.getValue(FriendStatus.class)));
+                deleteFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(), snapshot.getValue(FriendStatusEnum.class)));
             }
 
             @Override

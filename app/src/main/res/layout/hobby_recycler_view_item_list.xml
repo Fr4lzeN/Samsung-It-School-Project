@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="16dp"
-    app:cardCornerRadius="10dp"
-    android:elevation="20dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="16dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="123456"
-        android:textColor="@color/black"
+        android:text="Лошади (верховая езда, уход)"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:textAlignment="center"/>
 
-</androidx.cardview.widget.CardView>
+</FrameLayout>
 

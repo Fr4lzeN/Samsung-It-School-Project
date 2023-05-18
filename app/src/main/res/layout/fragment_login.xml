@@ -1,50 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_margin="16dp">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="150dp"
+        android:src="@drawable/friends"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/headerStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="FRIEND"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/headline_large"
+        app:layout_constraintEnd_toStartOf="@id/headerEnd"
+        app:layout_constraintStart_toStartOf="@id/logo"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/headerEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="ED"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="@dimen/headline_large"
+        app:layout_constraintEnd_toEndOf="@id/logo"
+        app:layout_constraintStart_toEndOf="@id/headerStart"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/titleStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Давай дружить "
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/title_large"
+        app:layout_constraintEnd_toStartOf="@id/titleEnd"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerStart" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/titleEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="вместе!"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="@dimen/title_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/titleStart"
+        app:layout_constraintTop_toBottomOf="@id/headerStart" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumberInputLayout"
+        style="@style/OutlinedEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="start|center_vertical"
+        android:hint="Номер телефона"
+        app:endIconDrawable="@drawable/clear"
+        app:endIconMode="clear_text"
+        app:endIconTint="?attr/colorOnBackground"
+        app:layout_constraintBottom_toTopOf="@id/txt_pin_entry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleStart"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:prefixText="+7"
+        android:preferKeepClear="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneNumberEditText"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:gravity="top"
+            android:inputType="phone"
+            android:textSize="@dimen/body_large"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.alimuzaffar.lib.pin.PinEntryEditText
+        android:id="@+id/txt_pin_entry"
+        android:layout_width="360dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:cursorVisible="false"
+        android:digits="1234567890"
+        android:inputType="number"
+        android:maxLength="6"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/label_large"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toTopOf="@id/finish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phoneNumberInputLayout"
+        app:pinBackgroundDrawable="@drawable/pin_drawable"
+        app:pinTextBottomPadding="15dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:id="@+id/phoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Номер телефона"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@id/finish"
-            app:layout_constraintEnd_toEndOf="@id/finish"
-            app:layout_constraintStart_toStartOf="@id/finish"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/finish"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_primary"
+        android:enabled="false"
+        android:text="Продолжить"
+        android:textSize="@dimen/body_large"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="@id/phoneNumberInputLayout"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@id/phoneNumberInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/txt_pin_entry" />
 
 
-        <Button
-            android:id="@+id/finish"
+    <TextSwitcher
+        android:id="@+id/textSwitcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/finish">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/timerTextView"
+            style="@style/BodyText.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вход в аккаунт"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phoneNumber"/>
+            android:text="" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/resendCode"
+            style="@style/BodyText.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Отправить код"
+            android:textColor="?attr/colorPrimary" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </TextSwitcher>
 
-
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

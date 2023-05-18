@@ -3,15 +3,11 @@ package com.example.bubble.mainMenu;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.MessageListComparator;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
@@ -19,7 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.subjects.PublishSubject;
 
@@ -47,9 +42,9 @@ public class MainActivityModel {
 
     @SuppressLint("CheckResult")
     public static void getFriendList(String uid, MutableLiveData<List<FriendInfo>> friends, MutableLiveData<List<FriendInfo>> outgoingRequests, MutableLiveData<List<FriendInfo>> incomingRequests) {
-        PublishSubject<Map.Entry<FriendInfo,FriendStatus>> friendStatus = PublishSubject.create();
-        PublishSubject<Map.Entry<String,FriendStatus>> changeFriendStatus = PublishSubject.create();
-        PublishSubject<Map.Entry<String,FriendStatus>> deleteFriendStatus = PublishSubject.create();
+        PublishSubject<Map.Entry<FriendInfo, FriendStatusEnum>> friendStatus = PublishSubject.create();
+        PublishSubject<Map.Entry<String, FriendStatusEnum>> changeFriendStatus = PublishSubject.create();
+        PublishSubject<Map.Entry<String, FriendStatusEnum>> deleteFriendStatus = PublishSubject.create();
         FirebaseActions.getFriends(uid,friendStatus,changeFriendStatus, deleteFriendStatus);
         friends.setValue(null);
         outgoingRequests.setValue(null);

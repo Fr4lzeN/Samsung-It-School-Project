@@ -3,23 +3,18 @@ package com.example.bubble.registration;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.Toast;
 
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentUserInfoBinding;
-import com.example.bubble.registration.FillDataActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,17 +25,19 @@ public class UserInfoFragment extends Fragment {
     DatePickerDialog.OnDateSetListener datePicker;
     boolean nextFragment = false;
 
-
+    FillDataViewModel viewModel;
+    String otherGenderBase = "Свой вариант";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUserInfoBinding.inflate(inflater, container, false);
+        viewModel = new ViewModelProvider(requireActivity()).get(FillDataViewModel.class);
         binding.name.setText(FillDataActivity.getViewModel().getName());
         binding.info.setText(FillDataActivity.getViewModel().getInfo());
-        FillDataActivity.getViewModel().dateOfBirth.observe(getViewLifecycleOwner(), temp ->{
+        viewModel.dateOfBirth.observe(getViewLifecycleOwner(), temp ->{
             binding.dateOfBirth.setText(temp[2] + "/" + temp[1] + "/" + temp[0]);
-            buttonColor();
+            enableButton();
         });
 
         binding.dateOfBirth.setOnClickListener(view -> {
@@ -57,63 +54,95 @@ public class UserInfoFragment extends Fragment {
                 datePickerDialog.show();
         });
 
+        binding.maleChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.maleChip.getText().toString());
+            binding.otherChip.setText(otherGenderBase);
+            enableButton();
+        });
+
+        binding.femaleChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.femaleChip.getText().toString());
+            binding.otherChip.setText(otherGenderBase);
+            enableButton();
+        });
+
+        binding.otherChip.setOnClickListener(v -> {
+            SetGenderBottomSheetFragment fragment = new SetGenderBottomSheetFragment(gender -> {
+                if (!TextUtils.isEmpty(gender)) {
+                    viewModel.setGender(gender);
+                    binding.otherChip.setText(gender);
+                    enableButton();
+                }else{
+                    binding.unknownChip.performClick();
+                    binding.horizontalScrollView.scrollBy(400,0);
+                }
+            });
+            fragment.show(getParentFragmentManager(), null);
+
+        });
+
+        binding.unknownChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.unknownChip.getText().toString());
+            binding.otherChip.setText(otherGenderBase);
+            enableButton();
+        });
+
+
         datePicker = (view, year, month, dayOfMonth) -> {
-            FillDataActivity.getViewModel().setDateOfBirth(new Integer[]{year,month,dayOfMonth});
+            viewModel.setDateOfBirth(new Integer[]{year,month,dayOfMonth});
         };
 
         binding.name.addTextChangedListener(new MyTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                FillDataActivity.getViewModel().setName(s.toString());
-                buttonColor();
+                viewModel.setName(s.toString());
+                enableButton();
             }
         });
 
         binding.info.addTextChangedListener(new MyTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                FillDataActivity.getViewModel().setInfo(s.toString());
-                buttonColor();
+                viewModel.setInfo(s.toString());
+                enableButton();
             }
         });
 
 
         binding.nextButton.setOnClickListener(view -> {
-                if (nextFragment){
-                    Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userInfoFragment_to_hobbyFragment);
-                }
-                else{
-                    if (TextUtils.isEmpty(binding.name.getText().toString()) || binding.name.getText().toString().length()<2){
-                        binding.name.requestFocus();
-                        Toast.makeText(getContext(), "Необходимо ввести имя", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (TextUtils.isEmpty(binding.info.getText().toString())){
-                        binding.info.requestFocus();
-                        Toast.makeText(getContext(), "Необходимо заполнить описание", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (TextUtils.isEmpty(binding.dateOfBirth.getText().toString())){
-                        binding.dateOfBirth.requestFocus();
-                        Toast.makeText(getContext(), "Необходимо выбрать дату рождения", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
+            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userInfoFragment_to_hobbyFragment);
         });
 
         return binding.getRoot();
     }
 
-    void buttonColor(){
-        if (!TextUtils.isEmpty(binding.info.getText().toString()) &&
-                !TextUtils.isEmpty(binding.name.getText().toString()) &&
-                binding.name.getText().toString().length()>=2 &&
-                !TextUtils.isEmpty(binding.dateOfBirth.getText().toString())){
-            binding.nextButton.setBackgroundColor(getResources().getColor(R.color.green));
-            nextFragment=true;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (viewModel.getGender()!=null) {
+            switch (viewModel.getGender()) {
+                case "Мужчина":
+                    binding.maleChip.performClick();
+                    break;
+                case "Женщина":
+                    binding.femaleChip.performClick();
+                    break;
+                case "Не указан":
+                    binding.unknownChip.performClick();
+                default:
+                    binding.otherChip.setEnabled(true);
+                    binding.otherChip.setText(viewModel.getGender());
+                    break;
+            }
+        }
+    }
+
+    void enableButton(){
+        if (viewModel.userInfoCompleted()){
+            binding.nextButton.setEnabled(true);
         }else{
-            binding.nextButton.setBackgroundColor(getResources().getColor(R.color.purple_500));
-            nextFragment=false;
+            binding.nextButton.setEnabled(false);
         }
     }
 

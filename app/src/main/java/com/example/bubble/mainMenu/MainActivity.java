@@ -3,6 +3,7 @@ package com.example.bubble.mainMenu;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         viewModel.auth();
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -114,9 +116,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data!=null && resultCode==RESULT_OK)
+        if (data!=null && resultCode==RESULT_OK) {
             Log.d("Picture", "1");
             EditPicturesFragmentDialog.getViewModel().onResult(requestCode, data.getData());
+        }
     }
 
 }

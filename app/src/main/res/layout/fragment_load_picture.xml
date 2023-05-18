@@ -14,21 +14,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Добавь фотографии"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        style="@style/HeaderText.Large"
         android:gravity="center"
+        android:layout_marginTop="64dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginEnd="16dp" />
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Отправь хотя бы одну свою фотографию и регистрацию можно будет считать завершенной"
+        android:text="Для завершения регистрации осталось добавить от 1 до 5 фотографий"
         android:textAlignment="center"
-        android:textSize="16sp"
+        style="@style/TitleText.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
@@ -37,41 +35,65 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="250dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description"
-        app:layout_constraintBottom_toTopOf="@id/nextButton"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal"
         android:scrollbars="none"
         android:overScrollMode="never"
         tools:listitem="@layout/pick_profile_picture_item_list"
-        >
+        />
 
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <Button
-        android:id="@+id/nextButton"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addPicture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@id/buttons"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Далее"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:backgroundTint="@color/purple_500"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:src="@drawable/add"
+        style="@style/Widget.Material3.FloatingActionButton.Large.Primary"/>
 
-    <Button
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/addPicture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24dp">
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Назад"
-        android:backgroundTint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/button_primary"
         android:textSize="18sp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:layout_marginEnd="32dp"
+        app:backgroundTint="?attr/colorTertiary"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Завершить"
+            android:textSize="18sp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_primary"
+            android:enabled="false"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

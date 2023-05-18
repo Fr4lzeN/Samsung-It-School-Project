@@ -1,7 +1,6 @@
 package com.example.bubble.mainMenu;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +14,7 @@ public class ProfileFragmentViewModel extends ViewModel {
 
     MutableLiveData<List<StorageReference>> data = new MutableLiveData<>();
     MutableLiveData<String> uid = new MutableLiveData<>();
-    MutableLiveData<FriendStatus> friendStatus = new MutableLiveData<>();
+    MutableLiveData<FriendStatusEnum> friendStatus = new MutableLiveData<>();
 
     MutableLiveData<UserInfoJSON> userInfo = new MutableLiveData<>();
     MutableLiveData<List<String>> hobbies = new MutableLiveData<>();

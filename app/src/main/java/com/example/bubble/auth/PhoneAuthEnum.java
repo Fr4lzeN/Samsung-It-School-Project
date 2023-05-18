@@ -1,7 +1,8 @@
 package com.example.bubble.auth;
 
 public enum PhoneAuthEnum {
-    NONE,
+    SUCCESS,
     WAITING,
-    RESEND,
+    FAILTURE,
+    WRONG_NUMBER,
 }
