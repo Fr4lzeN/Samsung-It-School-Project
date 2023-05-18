@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".registration.RecyclerPictureBottomDialogFragment"
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceContainerHigh">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/deletePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/HeaderText.Medium"
+        android:textColor="?attr/colorError"
+        android:background="?attr/editTextBackground"
+        android:text="Удалить фото"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/changePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/HeaderText.Medium"
+        android:text="Изменить фото"
+        android:textColor="?attr/colorOnSurface"
+        android:background="?attr/editTextBackground"
+        android:gravity="center"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

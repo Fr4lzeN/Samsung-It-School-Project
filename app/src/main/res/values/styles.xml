@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="button">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <style name="button_with_drawable">
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <style name="shapeImageRound" parent="@style/ShapeAppearance.Material3.Corner.ExtraLarge">
+        <item name="cornerSize">75dp</item>
+    </style>
+
+    <style name="OutlinedEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/edit_text_stroke_color</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
+    </style>
+
+    <style name="FilledEditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxBackgroundColor">?attr/colorSurfaceContainerHigh</item>
+    </style>
+
+    <style name="pinText">
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+
+    <style name="ButtonPrimary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="HeaderText">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="HeaderText.Large" parent="HeaderText">
+        <item name="android:textSize">@dimen/headline_large</item>
+    </style>
+
+    <style name="HeaderText.Medium" parent="HeaderText">
+        <item name="android:textSize">@dimen/headline_medium</item>
+    </style>
+
+    <style name="HeaderText.Small" parent="HeaderText">
+        <item name="android:textSize">@dimen/headline_small</item>
+    </style>
+
+    <style name="TitleText">
+        <item name="android:textColor">?attr/colorTertiary</item>
+    </style>
+
+    <style name="TitleText.Large">
+        <item name="android:textSize">@dimen/title_large</item>
+    </style>
+
+    <style name="TitleText.Medium">
+        <item name="android:textSize">@dimen/title_medium</item>
+    </style>
+
+    <style name="TitleText.Small">
+        <item name="android:textSize">@dimen/title_small</item>
+    </style>
+
+    <style name="BodyText">
+
+    </style>
+
+    <style name="BodyText.Large">
+        <item name="android:textSize">@dimen/body_large</item>
+    </style>
+
+    <style name="BodyText.Medium">
+        <item name="android:textSize">@dimen/body_medium</item>
+    </style>
+
+    <style name="BodyText.Small">
+        <item name="android:textSize">@dimen/body_small</item>
+    </style>
+
+</resources>
