@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".SettingsFragment">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Settings"
-        android:textSize="32sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +32,6 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:layout_marginStart="8dp"
-                        android:background="@color/teal_200"
                         android:scaleType="centerCrop"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
-                        android:text="Name"
+                        tools:text="Имя"
                         android:textColor="@color/black"
                         android:textSize="@dimen/headline_medium"
                         app:layout_constraintBottom_toTopOf="@id/phoneNumberEditText"
@@ -74,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="8dp"
-                        android:text="Phone number"
+                        tools:text="Phone number"
                         android:textSize="@dimen/title_large"
                         app:layout_constraintBottom_toBottomOf="@id/profileImage"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -86,85 +70,116 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/openProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="20dp"
                 style="@style/Widget.Material3.CardView.Elevated">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/person"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Открыть профиль"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/title_large"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="20dp"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="16dp">
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/editProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
                     <ImageView
-                        android:id="@+id/editProfileImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/draw"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        android:src="@drawable/draw" />
 
                     <TextView
-                        android:id="@+id/editProfileText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/editProfileImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/editProfileImage"
-                        app:layout_constraintBottom_toBottomOf="@id/editProfileImage"
+                        android:layout_gravity="center"
                         android:text="Изменить данные"
                         android:textColor="?attr/colorPrimary"
-                        android:textSize="22sp"/>
+                        android:textSize="@dimen/title_large"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/editPictures"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
                     <ImageView
-                        android:id="@+id/changeImagesImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginTop="16dp"
                         android:src="@drawable/baseline_photo_library_24"
                         android:scaleType="centerInside"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/editProfileImage"/>
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"/>
 
                     <TextView
-                        android:id="@+id/changeImagesText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/changeImagesImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/changeImagesImage"
-                        app:layout_constraintBottom_toBottomOf="@id/changeImagesImage"
+                        android:layout_gravity="center"
                         android:text="Поменять фото"
                         android:textColor="?attr/colorPrimary"
-                        android:textSize="22sp"/>
+                        android:textSize="@dimen/title_large"/>
 
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/editHobby"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
                     <ImageView
-                        android:id="@+id/chooseHobbyImage"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginTop="16dp"
                         android:src="@drawable/hobby"
-                        android:scaleType="centerInside"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/changeImagesImage"/>
+                        android:scaleType="centerInside"/>
 
                     <TextView
-                        android:id="@+id/chooseHobbyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/chooseHobbyImage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/chooseHobbyImage"
-                        app:layout_constraintBottom_toBottomOf="@id/chooseHobbyImage"
                         android:text="Выбрать хобби"
+                        android:layout_gravity="center"
                         android:textColor="?attr/colorPrimary"
-                        android:textSize="22sp"/>
+                        android:textSize="@dimen/title_large"/>
 
+                    </com.google.android.material.card.MaterialCardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
 
             </com.google.android.material.card.MaterialCardView>
@@ -176,149 +191,130 @@
                 app:cardCornerRadius="20dp"
                 style="@style/Widget.Material3.CardView.Elevated">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="16dp">
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/notifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
 
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/nightModeImage"
+                    <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@color/teal_200"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        android:src="@drawable/notifications"
+                        android:scaleType="centerInside" />
 
                     <TextView
-                        android:id="@+id/nightModeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Уведомления"
                         android:gravity="center"
-                        android:textColor="?attr/colorOnSurface"
-                        app:layout_constraintStart_toEndOf="@id/nightModeImage"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@id/nightModeImage"
-                        app:layout_constraintEnd_toStartOf="@id/nightModeSwitcher"
-                        android:textSize="22sp"/>
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="@dimen/title_large"
+                        android:layout_gravity="center"/>
 
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/nightModeSwitcher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@id/nightModeImage"/>
+                        android:layout_marginEnd="8dp"
+                        android:layout_gravity="center_vertical|end"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/privateAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/notificationsImage"
-                        android:layout_marginTop="16dp"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/nightModeImage"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/green"/>
+                        android:src="@drawable/shield"
+                        android:scaleType="centerInside"/>
 
                     <TextView
-                        android:id="@+id/notificationText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/notificationsImage"
-                        app:layout_constraintTop_toTopOf="@id/notificationsImage"
-                        app:layout_constraintBottom_toBottomOf="@id/notificationsImage"
-                        app:layout_constraintEnd_toStartOf="@id/notificationSwitcher"
                         android:text="Закрытый аккаунт"
-                        android:textSize="22sp"
-                        android:textColor="?attr/colorOnSurface"/>
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/title_large"
+                        android:textColor="?attr/colorPrimary"/>
 
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/notificationSwitcher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="@id/notificationsImage"
-                        app:layout_constraintBottom_toBottomOf="@id/notificationsImage"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="8dp"
                         app:layout_constraintEnd_toEndOf="parent"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/messageUs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        style="@style/Widget.Material3.CardView.Outlined">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/privateImage"
-                        android:layout_marginTop="16dp"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/notificationsImage"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/white"/>
+                        android:src="@drawable/send"
+                        android:scaleType="centerInside"/>
 
                     <TextView
-                        android:id="@+id/privateText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/privateImage"
-                        app:layout_constraintTop_toTopOf="@id/privateImage"
-                        app:layout_constraintBottom_toBottomOf="@id/privateImage"
-                        app:layout_constraintEnd_toStartOf="@id/privateSwitcher"
                         android:text="Написать нам"
-                        android:textSize="22sp"
-                        android:textColor="?attr/colorOnSurface"/>
+                        android:textSize="@dimen/title_large"
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_gravity="center"/>
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/privateSwitcher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="@id/privateImage"
-                        app:layout_constraintBottom_toBottomOf="@id/privateImage"
-                        app:layout_constraintEnd_toEndOf="parent"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="20dp"
                 style="@style/Widget.Material3.CardView.Elevated">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/logOutImage"
+                    <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
-                        android:background="@color/purple_500"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        android:src="@drawable/logout"
+                        android:scaleType="centerInside"
+                        android:layout_marginStart="16dp"/>
 
                     <TextView
-                        android:id="@+id/logOutText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="@id/logOutImage"
-                        app:layout_constraintBottom_toBottomOf="@id/logOutImage"
-                        app:layout_constraintStart_toEndOf="@id/logOutImage"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:text="Выйти из аккаунта"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="22sp"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/title_large"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"/>
 
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
-    </ScrollView>
+ </ScrollView>
 
-</LinearLayout>

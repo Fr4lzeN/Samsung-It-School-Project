@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.SettingsFragment;
 import com.example.bubble.databinding.ActivityMainBinding;
 import com.example.bubble.registration.FillDataActivity;
@@ -35,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.subjects.PublishSubject;
@@ -51,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         viewModel.auth();
+
+        viewModel.incomingRequests.observe(this, friendInfos -> {
+            if (friendInfos!=null && friendInfos.size()!=0) {
+                binding.bottomNavigationView.getOrCreateBadge(R.id.friends).setNumber(friendInfos.size());
+            }else{
+                binding.bottomNavigationView.removeBadge(R.id.friends);
+            }
+        });
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.search:
@@ -113,13 +124,5 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data!=null && resultCode==RESULT_OK) {
-            Log.d("Picture", "1");
-            EditPicturesFragmentDialog.getViewModel().onResult(requestCode, data.getData());
-        }
-    }
 
 }

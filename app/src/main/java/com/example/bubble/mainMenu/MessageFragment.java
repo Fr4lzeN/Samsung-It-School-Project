@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.TextUtils;
@@ -98,7 +99,10 @@ public class MessageFragment extends Fragment {
         viewModel.picture.observe(getViewLifecycleOwner(), uri -> {
             Glide.with(requireContext()).load(uri).into(binding.image);
         });
-        binding.sendMessageImage.setOnClickListener(v -> {
+
+        binding.backArrow.setOnClickListener(v -> backFragment());
+
+        binding.messageLayout.setEndIconOnClickListener(v -> {
             if (!TextUtils.isEmpty(binding.messageEditText.getText().toString())) {
                 if (messageId != null) {
                     viewModel.sendMessage(binding.messageEditText.getText().toString());
@@ -113,6 +117,11 @@ public class MessageFragment extends Fragment {
         binding.image.setOnClickListener(openProfile);
 
         return binding.getRoot();
+    }
+
+    private void backFragment() {
+        FragmentManager fm = getParentFragmentManager();
+        fm.popBackStack();
     }
 
     private void openProfileFragment(String uid) {

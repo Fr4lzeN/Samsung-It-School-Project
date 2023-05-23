@@ -13,19 +13,22 @@
         android:layout_height="wrap_content"
         android:src="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/image"
+        app:layout_constraintBottom_toBottomOf="@id/image"
+        android:scaleType="centerInside"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:background="@color/black"
         app:layout_constraintEnd_toStartOf="@id/name"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="8dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"/>
+        app:shapeAppearance="@style/shapeImageRoundSmall"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/name"
@@ -40,35 +43,43 @@
         android:textColor="@color/black"
         android:layout_marginStart="8dp"/>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        android:layout_marginTop="2dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/messageEditText"
+        app:layout_constraintBottom_toTopOf="@+id/messageLayout"
         app:layout_constraintTop_toBottomOf="@id/image"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="-4dp"/>
 
-    <ImageView
-        android:id="@+id/sendMessageImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/send_message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <EditText
-        android:id="@+id/messageEditText"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:id="@+id/messageLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/sendMessageImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:endIconDrawable="@drawable/send_message"
+        app:endIconMode="custom"
+        app:endIconScaleType="centerInside">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/messageEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textColor="@color/black"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        style="@style/OutlinedEditText"
         tools:text="textAAAA"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

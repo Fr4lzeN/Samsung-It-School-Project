@@ -16,6 +16,10 @@
         <item name="cornerSize">75dp</item>
     </style>
 
+    <style name="shapeImageRoundSmall" parent="@style/ShapeAppearance.Material3.Corner.ExtraLarge">
+        <item name="cornerSize">37dp</item>
+    </style>
+
     <style name="OutlinedEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/edit_text_stroke_color</item>
         <item name="boxCornerRadiusBottomEnd">20dp</item>

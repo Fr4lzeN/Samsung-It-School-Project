@@ -3,34 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="16dp"
+    >
 
 
 
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        style="@style/Widget.Material3.CardView.Elevated">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
         <TextView
             android:id="@+id/text"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
+            android:maxWidth="250dp"
+            android:minWidth="150dp"
             android:layout_height="wrap_content"
             android:text="Message"
-            android:textSize="22sp"
-            android:textColor="@color/black"/>
+            android:textSize="@dimen/title_large"
+            android:textColor="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            style="@style/BodyText.Small"
             android:layout_marginTop="4dp"
-            android:text="time"/>
+            android:text="time"
+            android:textColor="?attr/colorOnBackground"/>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </FrameLayout>

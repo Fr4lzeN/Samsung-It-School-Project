@@ -1,5 +1,7 @@
 package com.example.bubble;
 
+import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import com.example.bubble.databinding.MessageItemListBinding;
 import com.example.bubble.mainMenu.MessageFragmentModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.color.MaterialColors;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -53,24 +57,35 @@ public class FirebaseMessageAdapter extends FirebaseRecyclerAdapter<MessageJSON,
 
     @Override
     protected void onBindViewHolder(@NonNull MessageViewHolder holder, int position, @NonNull MessageJSON model) {
+        TypedValue typedValue;
         if (model.uid.equals(FirebaseAuth.getInstance().getUid())){
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) holder.message.getLayoutParams();
+            MaterialCardView.LayoutParams params = (MaterialCardView.LayoutParams) holder.message.getLayoutParams();
             params.gravity= Gravity.END;
             holder.message.setLayoutParams(params);
             holder.text.setGravity(Gravity.END);
             holder.time.setGravity(Gravity.END);
+            typedValue = new TypedValue();
+            holder.itemView.getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorPrimaryContainer, typedValue, true);
         }
         else{
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) holder.message.getLayoutParams();
+            MaterialCardView.LayoutParams params = (MaterialCardView.LayoutParams) holder.message.getLayoutParams();
             params.gravity= Gravity.START;
             holder.message.setLayoutParams(params);
             holder.text.setGravity(Gravity.START);
             holder.time.setGravity(Gravity.START);
+            typedValue = new TypedValue();
+            holder.itemView.getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true);
         }
+        int color = typedValue.data;
+        holder.message.setCardBackgroundColor(color);
         holder.text.setText(model.message);
         Calendar date = new GregorianCalendar();
         date.setTimeInMillis(model.date);
-        holder.time.setText(date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR)+" "+date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));
+        String minute = String.valueOf(date.get(Calendar.MINUTE));
+        if (minute.length()==1){
+            minute="0"+minute;
+        }
+        holder.time.setText(date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR)+" "+date.get(Calendar.HOUR_OF_DAY)+":"+minute);
         itemCount.setValue(holder.getAbsoluteAdapterPosition());
     }
 
@@ -83,7 +98,7 @@ public class FirebaseMessageAdapter extends FirebaseRecyclerAdapter<MessageJSON,
 
     public class MessageViewHolder extends RecyclerView.ViewHolder{
 
-        LinearLayout message;
+        MaterialCardView message;
         TextView text;
         TextView time;
 

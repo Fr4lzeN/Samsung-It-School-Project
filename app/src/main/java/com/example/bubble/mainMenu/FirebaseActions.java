@@ -11,6 +11,7 @@ import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.JSON.MessageJSON;
 import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.JSON.UserInfoJSON;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -200,6 +201,10 @@ public class FirebaseActions {
         return FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).get();
     }
 
+    public static DatabaseReference subscribeOnFriendStatus(String myUid, String userUid){
+        return FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid);
+    }
+
     public static Task<Void> deleteFriend(String myUid, String userUid) {
         List<Task<Void>> tasks = new ArrayList<>();
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).removeValue());
@@ -306,15 +311,10 @@ public class FirebaseActions {
         MessageListItem message = new MessageListItem();
         message.messageId=chatId;
         message.uid=uid;
-        Log.d("Message", chatId);
         FirebaseDatabase.getInstance().getReference("chat").child(chatId).limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 message.setMessage(snapshot.getValue(MessageJSON.class));
-                Log.d("Message", message.message.toString());
-                Log.d("Message", snapshot.toString());
-                Log.d("Message", snapshot.getKey());
-                Log.d("Message", "_________");
                 userTask.addOnCompleteListener(task -> message.setUserInfo(task.getResult().getValue(UserInfoJSON.class)));
                 pictureTask.addOnCompleteListener(task -> message.setPicture(task.getResult()));
                 Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
@@ -364,7 +364,7 @@ public class FirebaseActions {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                changeFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(),snapshot.getValue(FriendStatusEnum.class)));
+                changeFriend.onNext(new AbstractMap.SimpleEntry<>(snapshot.getKey(), snapshot.getValue(FriendStatusEnum.class)));
             }
 
             @Override
@@ -429,6 +429,7 @@ public class FirebaseActions {
             user.setUserData(task.getResult().getValue(UserInfoJSON.class));
         });
         Task<Uri> pictureTask = FirebaseStorage.getInstance().getReference(userUid).child("1").getDownloadUrl().addOnCompleteListener(task -> {
+            Log.d("UserExits", user.getUid());
            user.setPicture(task.getResult());
         });
         Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
@@ -438,5 +439,24 @@ public class FirebaseActions {
 
     public static void userUidByHobbyDelete(String hobby) {
         FirebaseDatabase.getInstance().getReference("hobbies").child(hobby).removeEventListener(uidByHobbyListener);
+    }
+
+    public static void createGroupChat(String name, List<String> selected, Uri picture) {
+        List<Task<Void>> tasks = new ArrayList<>();
+        String myUid = FirebaseAuth.getInstance().getUid();
+        String pushKey = FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("groupChat").push().getKey();
+       tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(myUid).child("groupChat").child(pushKey).setValue(pushKey));
+        for (String uid : selected){
+            tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(uid).child("groupChat").child(pushKey).setValue(pushKey));
+        }
+        tasks.add(FirebaseDatabase.getInstance().getReference("groupChat").child(pushKey).child("name").setValue(name));
+        Tasks.whenAll(Tasks.whenAll(tasks),FirebaseStorage.getInstance().getReference("groupChat").child(pushKey).putFile(picture)).addOnCompleteListener(task -> {
+            sendGroupMessage("Чат "+name+" создан!", pushKey);
+        });
+    }
+
+    public static void sendGroupMessage(String message, String messageId){
+        MessageJSON messageJSON = new MessageJSON(message, FirebaseAuth.getInstance().getUid());
+        FirebaseDatabase.getInstance().getReference("groupChat").child(messageId).updateChildren(Collections.singletonMap(String.valueOf(messageJSON.date), messageJSON));
     }
 }

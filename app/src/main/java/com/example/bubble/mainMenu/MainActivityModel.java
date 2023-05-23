@@ -22,6 +22,7 @@ public class MainActivityModel {
     @SuppressLint("CheckResult")
     public static void getMessageData(String uid, MutableLiveData<ArrayList<MessageListItem>> allMessagesData) {
         PublishSubject<Map.Entry<String,String>> chatIds = PublishSubject.create();
+        PublishSubject<Map.Entry<String,String>> groupChatIds = PublishSubject.create();
         PublishSubject<MessageListItem> message = PublishSubject.create();
         FirebaseActions.getChatIds(uid, chatIds);
         Map<String, MessageListItem> messages = new HashMap<>();
@@ -69,6 +70,7 @@ public class MainActivityModel {
                              tempIncomingList = new ArrayList<>();
                          tempIncomingList.add(map.getKey());
                          incomingRequests.setValue(tempIncomingList);
+                         break;
                      case OUTGOING_REQUEST:
                          List<FriendInfo> tempOutgoingList;
                          if (outgoingRequests.getValue()!=null)
@@ -77,17 +79,19 @@ public class MainActivityModel {
                              tempOutgoingList = new ArrayList<>();
                          tempOutgoingList.add(map.getKey());
                          outgoingRequests.setValue(tempOutgoingList);
+                         break;
                  }
                 },
                 throwable -> {
-                    Log.d("Error", throwable.toString());
+                    Log.d("AAAAF", throwable.toString());
                 }
         );
         changeFriendStatus.subscribe(
                 map ->{
                     if (!changeFriendStatus(friends,outgoingRequests, map.getKey()))
                         changeFriendStatus(friends,incomingRequests, map.getKey());
-                }
+                },
+                throwable -> Log.d("AAAAC", throwable.toString())
         );
 
         deleteFriendStatus.subscribe(
@@ -97,39 +101,44 @@ public class MainActivityModel {
                             deleteFriendStatus(friends, map.getKey());
                             break;
                         case INCOMING_REQUEST:
-                            deleteFriendStatus(outgoingRequests, map.getKey());
-                            break;
-                        case OUTGOING_REQUEST:
                             deleteFriendStatus(incomingRequests, map.getKey());
                             break;
+                        case OUTGOING_REQUEST:
+                            deleteFriendStatus(outgoingRequests, map.getKey());
+                            break;
                     }
-                }
+                },
+                throwable -> Log.d("AAAAD", throwable.toString())
         );
     }
 
 
     static boolean changeFriendStatus(MutableLiveData<List<FriendInfo>> firstList, MutableLiveData<List<FriendInfo>> secondList, String uid){
-        for (FriendInfo i : secondList.getValue()){
-            if (i.getUid().equals(uid)){
-                List<FriendInfo> temp = new ArrayList<>(secondList.getValue());
-                temp.remove(i);
-                secondList.setValue(temp);
-                temp = new ArrayList<>(firstList.getValue());
-                temp.add(i);
-                firstList.setValue(temp);
-                return true;
+        if (secondList.getValue()!=null) {
+            for (FriendInfo i : secondList.getValue()) {
+                if (i.getUid().equals(uid)) {
+                    List<FriendInfo> temp = new ArrayList<>(secondList.getValue());
+                    temp.remove(i);
+                    secondList.setValue(temp);
+                    temp = new ArrayList<>(firstList.getValue());
+                    temp.add(i);
+                    firstList.setValue(temp);
+                    return true;
+                }
             }
         }
         return false;
     }
 
     static void deleteFriendStatus(MutableLiveData<List<FriendInfo>> list, String uid){
-        List<FriendInfo> tempList = new ArrayList<>(list.getValue());
-        for (FriendInfo i : tempList){
-            if (i.getUid().equals(uid)){
-                tempList.remove(i);
-                list.setValue(tempList);
-                return;
+        if (list.getValue()!=null) {
+            List<FriendInfo> tempList = new ArrayList<>(list.getValue());
+            for (FriendInfo i : tempList) {
+                if (i.getUid().equals(uid)) {
+                    tempList.remove(i);
+                    list.setValue(tempList);
+                    return;
+                }
             }
         }
     }

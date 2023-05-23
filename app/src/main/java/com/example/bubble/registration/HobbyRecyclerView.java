@@ -22,6 +22,14 @@ import java.util.List;
 
 public class HobbyRecyclerView extends RecyclerView.Adapter<HobbyRecyclerView.HobbyViewHolder> implements Filterable {
 
+    public List<String> getData() {
+        return data;
+    }
+
+    public ArrayList<Boolean> getChecked() {
+        return checked;
+    }
+
     public interface OnItemClick{
         void onItemClick(boolean chipChecked);
     }

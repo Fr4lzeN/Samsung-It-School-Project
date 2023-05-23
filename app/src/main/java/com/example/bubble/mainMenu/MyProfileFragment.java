@@ -4,7 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
+import com.example.bubble.HobbyTabFragment;
+import com.example.bubble.InformationTabFragment;
 import com.example.bubble.JSON.UserInfoJSON;
+import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentMyProfileBinding;
+import com.example.bubble.registration.HobbyRecyclerView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -62,9 +71,15 @@ public class MyProfileFragment extends Fragment {
             switch (direction){
                 case ItemTouchHelper.RIGHT:
                     binding.recyclerView.scrollToPosition(position-1);
+                    binding.selectedPicture.getChildAt(position).setEnabled(false);
+                    binding.selectedPicture.getChildAt(position-1).setEnabled(true);
+                    binding.selectedPicture.getChildAt(position-1).performClick();
                     break;
                 case ItemTouchHelper.LEFT:
                     binding.recyclerView.scrollToPosition(position+1);
+                    binding.selectedPicture.getChildAt(position).setEnabled(false);
+                    binding.selectedPicture.getChildAt(position+1).setEnabled(true);
+                    binding.selectedPicture.getChildAt(position+1).performClick();
                     break;
             }
         }
@@ -83,6 +98,10 @@ public class MyProfileFragment extends Fragment {
 
         viewModel.data.observe(getViewLifecycleOwner(), storageReferences -> {
             adapter = new ProfilePictureRecyclerView(storageReferences);
+            binding.selectedPicture.getChildAt(0).performClick();
+            for (int i=1; i<storageReferences.size(); i++){
+                binding.selectedPicture.getChildAt(i).setVisibility(View.VISIBLE);
+            }
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false){
                 @Override
                 public boolean canScrollHorizontally() {
@@ -96,24 +115,45 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
-        viewModel.userInfo.observe(getViewLifecycleOwner(), this::displayInfo);
-        viewModel.hobbies.observe(getViewLifecycleOwner(), strings -> {
-            if (strings!=null)
-            for (String i : strings){
-                binding.hobbiesTextView.setText(binding.hobbiesTextView.getText().toString()+" "+i);
+        viewModel.userInfo.observe(getViewLifecycleOwner(), user -> {
+            binding.name.setText(user.name);
+            replaceFragment(0);
+        });
+
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                replaceFragment(tab.parent.getSelectedTabPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+
         return binding.getRoot();
     }
 
-    public void displayInfo(UserInfoJSON user){
-        Calendar today = Calendar.getInstance();
-        int year = today.get(Calendar.YEAR)- user.dateOfBirth.year;
-        if ((user.dateOfBirth.month>(today.get(Calendar.MONTH)+1)) ||((user.dateOfBirth.month==today.get(Calendar.MONTH) && user.dateOfBirth.day>today.get(Calendar.DAY_OF_MONTH))) ){
-            year--;
+    private void replaceFragment(int selectedTabPosition) {
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        switch (selectedTabPosition){
+            case 0:
+                ft.replace(R.id.nav_host_fragment, new InformationTabFragment());
+                break;
+            case 1:
+                ft.replace(R.id.nav_host_fragment, new HobbyTabFragment());
+                break;
         }
-        binding.name.setText(user.name+", "+String.valueOf(year));
-        binding.info.setText(user.info);
+        ft.commit();
+
     }
+
 
 }

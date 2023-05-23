@@ -3,30 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".mainMenu.SearchFragment"
     android:orientation="vertical"
     android:layout_margin="16dp">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="search" />
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        style="@style/FilledEditText"
         android:hint="Хобби"
-        />
+        app:startIconDrawable="@drawable/search_vector"
+        app:endIconMode="clear_text"
+        app:endIconDrawable="@drawable/clear">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="@dimen/body_large" />
+
+    </com.google.android.material.textfield.TextInputLayout>
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/recyclerView"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:layout_margin="16dp"
+       android:layout_marginTop="8dp"
        />
 
 </LinearLayout>

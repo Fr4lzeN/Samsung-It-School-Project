@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentChangeHobbyDialogBinding;
 import com.example.bubble.registration.HobbyRecyclerView;
+import com.example.bubble.registration.MyTextWatcher;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -44,18 +47,30 @@ public class ChangeHobbyFragmentDialog extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         binding = FragmentChangeHobbyDialogBinding.inflate(inflater,container,false);
         viewModel = new ViewModelProvider(this).get(ChangeHobbyFragmentDialogViewModel.class);
-        viewModel.getCurrentHobbies();
-        viewModel.hobbiesDownloaded.observe(getViewLifecycleOwner(), aBoolean -> {
-            viewModel.createAdapter(requireActivity());
-            binding.progressBar.setVisibility(View.GONE);
-            binding.layout.setVisibility(View.VISIBLE);
+        viewModel.hobbiesAdapter.observe(getViewLifecycleOwner(), hobbyRecyclerView -> {
+                    if (hobbyRecyclerView == null) {
+                        viewModel.createAdapter();
+                    } else {
+                        binding.recyclerView.setAdapter(hobbyRecyclerView);
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.layout.setVisibility(View.VISIBLE);
+                    }
         });
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),4, GridLayoutManager.HORIZONTAL, false));
-        viewModel.adapter.observe(getViewLifecycleOwner(), hobbyRecyclerView -> {
-            binding.recyclerView.setAdapter(hobbyRecyclerView);
+
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6, GridLayoutManager.HORIZONTAL, false));
+        binding.toolBar.setNavigationOnClickListener(v -> dismiss());
+        viewModel.chipChecked.observe(getViewLifecycleOwner(), aBoolean -> {
+                binding.finish.setEnabled(aBoolean);
+            });
+
+        binding.search.addTextChangedListener(new MyTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.getAdapter().getFilter().filter(s);
+            }
         });
-        binding.closeImage.setOnClickListener(v -> dismiss());
-        binding.checkImage.setOnClickListener(v -> {
+
+        binding.finish.setOnClickListener(v -> {
             binding.progressBar.setVisibility(View.VISIBLE);
             binding.layout.setVisibility(View.GONE);
             viewModel.changeHobbies();
@@ -77,11 +92,14 @@ public class ChangeHobbyFragmentDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        ConstraintLayout layout = binding.getRoot();
+        CoordinatorLayout layout = binding.getRoot();
         //layout.setMinimumHeight((int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.8));
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height= (int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.9);
+        binding.appBar.addOnOffsetChangedListener(
+                (AppBarLayout.BaseOnOffsetChangedListener) (appBarLayout, verticalOffset) -> {
+                    bottomSheetBehavior.setDraggable((appBarLayout.getBottom() - verticalOffset) == appBarLayout.getBottom());
+                });
         layout.setLayoutParams(params);
     }
-
 }

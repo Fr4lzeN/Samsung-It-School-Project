@@ -27,4 +27,10 @@ public class EditProfileInfoFragmentDialogViewModel extends ViewModel {
     public void updateInfo(String name, String info, String dateOfBirth) {
         EditProfileInfoFragmentDialogModel.updateInfo(result, sendResults, userInfo, user, name, info, dateOfBirth.split("/"));
     }
+
+    public void setGender(String gender) {
+        UserInfoJSON tempUser = userInfo.getValue();
+        tempUser.gender=gender;
+        userInfo.setValue(tempUser);
+    }
 }

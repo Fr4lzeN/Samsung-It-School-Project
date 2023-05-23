@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".mainMenu.MessagesFragment">
 
     <LinearLayout
@@ -11,10 +12,21 @@
         android:orientation="vertical"
         android:layout_margin="16dp">
 
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="messages" />
+            android:layout_height="?attr/actionBarSize"
+            app:title="Сообщения"
+            app:navigationIcon="@drawable/baseline_group_add_24"
+            app:titleCentered="true"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:layout_scrollEffect="compress"
+            android:background="@color/fui_transparent"
+            />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

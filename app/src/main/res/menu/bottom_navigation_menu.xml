@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/search"
         android:enabled="true"
         android:icon="@drawable/search_vector"
-        android:title="search"/>
+        android:title="Поиск"/>
     <item
         android:id="@+id/messages"
         android:enabled="true"
         android:icon="@drawable/chat_vector"
-        android:title="messages"/>
+        android:title="Сообщения"/>
     <item
         android:id="@+id/friends"
         android:enabled="true"
-        android:icon="@drawable/smile_vector"
-        android:title="friends"/>
+        android:icon="@drawable/groups"
+        android:title="Контакты"/>
     <item
         android:id="@+id/profile"
         android:enabled="true"
-        android:icon="@drawable/user_vector"
-        android:title="profile"/>
+        android:icon="@drawable/settings_vector"
+        android:title="Настройки"/>
 </menu>

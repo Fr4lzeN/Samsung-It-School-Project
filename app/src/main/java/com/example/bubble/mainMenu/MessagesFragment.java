@@ -23,17 +23,22 @@ import java.util.ArrayList;
 public class MessagesFragment extends Fragment {
 
     FragmentMessagesBinding binding;
+    MainActivityViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMessagesBinding.inflate(inflater,container, false);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         MainActivity.getViewModel().allMessagesData.observe(getViewLifecycleOwner(), messageListItems -> {
             MessageListAdapter adapter = new MessageListAdapter(messageListItems, (userInfo, messageId, uid) ->
                     replaceFragment(new MessageFragment(uid, userInfo, messageId)));
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
             binding.recyclerView.setAdapter(adapter);
         });
+
+        binding.toolBar.setNavigationOnClickListener(v -> replaceFragment(new CreateGroupChatFragment(viewModel.friends.getValue())));
+
         return binding.getRoot();
     }
 

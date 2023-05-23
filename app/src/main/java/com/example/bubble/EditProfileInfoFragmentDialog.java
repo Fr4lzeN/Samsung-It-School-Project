@@ -13,10 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bubble.JSON.UserInfoJSON;
 import com.example.bubble.databinding.FragmentDialogEditProfileInfoBinding;
+import com.example.bubble.registration.SetGenderBottomSheetFragment;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
+public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
 
     interface DismissListener {
         void dismiss();
@@ -63,7 +66,7 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
             binding.progressBar.setVisibility(View.GONE);
             binding.layout.setVisibility(View.VISIBLE);
         });
-        binding.dateOfBirthEditText.setOnClickListener(v -> {
+        binding.dateOfBirth.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
@@ -77,21 +80,52 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
             datePickerDialog.show();
         });
 
+        binding.maleChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.maleChip.getText().toString());
+            clearChip();
+        });
+
+        binding.femaleChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.maleChip.getText().toString());
+            clearChip();
+        });
+
+        binding.unknownChip.setOnClickListener(v -> {
+            viewModel.setGender(binding.maleChip.getText().toString());
+            clearChip();
+        });
+
+        binding.otherChip.setOnClickListener(v -> {
+            SetGenderBottomSheetFragment fragment = new SetGenderBottomSheetFragment(gender -> {
+                if (!TextUtils.isEmpty(gender)) {
+                    viewModel.setGender(gender);
+                    binding.otherChip.setText(gender);
+                }else{
+                    binding.unknownChip.performClick();
+                    binding.horizontalScrollView.scrollBy(400,0);
+                }
+            });
+            fragment.show(getParentFragmentManager(), null);
+
+        });
+
         datePicker = (view, year, month, dayOfMonth) -> {
-            binding.dateOfBirthEditText.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+            binding.dateOfBirth.setText(dayOfMonth+"/"+(month+1)+"/"+year);
         };
 
-        binding.closeImage.setOnClickListener(v -> {
+        binding.toolBar.setNavigationOnClickListener(v -> {
             dismiss();
         });
 
-        binding.checkImage.setOnClickListener(v -> {
+        binding.finish.setOnClickListener(v -> {
             binding.layout.setVisibility(View.GONE);
             binding.progressBar.setVisibility(View.VISIBLE);
-            viewModel.updateInfo(binding.nameEditText.getText().toString(),
-                    binding.infoEditText.getText().toString(),
-                    binding.dateOfBirthEditText.getText().toString());
+            viewModel.updateInfo(binding.name.getText().toString(),
+                    binding.info.getText().toString(),
+                    binding.dateOfBirth.getText().toString());
         });
+
+
 
         viewModel.result.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
@@ -99,12 +133,19 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
             }
             else{
                 Toast.makeText(requireContext(), "Ошибка", Toast.LENGTH_SHORT).show();
+                binding.layout.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
 
 
         return binding.getRoot();
 
+    }
+
+    private void clearChip() {
+        binding.otherChip.setSelected(false);
+        binding.otherChip.setText("Свой вариант");
     }
 
     @Override
@@ -117,6 +158,11 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
         //layout.setMinimumHeight((int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.8));
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height= (int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.9);
+        binding.appBar.addOnOffsetChangedListener(
+                (AppBarLayout.BaseOnOffsetChangedListener) (appBarLayout, verticalOffset) -> {
+            bottomSheetBehavior.setDraggable((appBarLayout.getBottom() - verticalOffset) == appBarLayout.getBottom());
+        });
+
         layout.setLayoutParams(params);
     }
 
@@ -127,9 +173,25 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment {
     }
 
     private void displayInfo(UserInfoJSON userInfoJSON) {
-        binding.nameEditText.setText(userInfoJSON.name);
-        binding.infoEditText.setText(userInfoJSON.info);
-        binding.dateOfBirthEditText.setText(userInfoJSON.dateOfBirth.day+"/"+userInfoJSON.dateOfBirth.month+"/"+userInfoJSON.dateOfBirth.year);
+        binding.name.setText(userInfoJSON.name);
+        binding.info.setText(userInfoJSON.info);
+        binding.dateOfBirth.setText(userInfoJSON.dateOfBirth.day+"/"+userInfoJSON.dateOfBirth.month+"/"+userInfoJSON.dateOfBirth.year);
+        switch (userInfoJSON.gender){
+            case "Мужчина":
+                binding.maleChip.performClick();
+                break;
+            case "Женщина":
+                binding.femaleChip.performClick();
+                break;
+            case "Не указан":
+                binding.unknownChip.performClick();
+                break;
+            default:
+                binding.otherChip.setSelected(true);
+                binding.otherChip.setText(userInfoJSON.gender);
+                break;
+        }
+        viewModel.userInfo.removeObservers(getViewLifecycleOwner());
     }
 
 

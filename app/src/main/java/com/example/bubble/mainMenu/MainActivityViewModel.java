@@ -22,13 +22,12 @@ public class MainActivityViewModel extends ViewModel {
     MutableLiveData<ArrayList<String>> hobbyList = new MutableLiveData<>();
 
 
-
     MutableLiveData<List<FriendInfo>> friends = new MutableLiveData<>();
-    MutableLiveData<Boolean> friendRecyclerIsClicked = new MutableLiveData<>();
     MutableLiveData<List<FriendInfo>> outgoingRequests = new MutableLiveData<>();
-    MutableLiveData<Boolean> outgoingRecyclerIsClicked = new MutableLiveData<>();
     MutableLiveData<List<FriendInfo>> incomingRequests = new MutableLiveData<>();
-    MutableLiveData<Boolean> incomingRecyclerIsClicked = new MutableLiveData<>();
+
+    MutableLiveData<FriendStatusEnum> friendStatusShowing = new MutableLiveData<>(FriendStatusEnum.FRIENDS);
+    MutableLiveData<String> searchText = new MutableLiveData<>();
 
 
 
@@ -46,19 +45,23 @@ public class MainActivityViewModel extends ViewModel {
         MainActivityModel.getFriendList(mAuth.getUid(),friends,outgoingRequests,incomingRequests);
     }
 
-
-
-    public void setRecyclerState(Boolean visibility, Boolean visibility1, Boolean visibility2) {
-        friendRecyclerIsClicked.setValue(visibility);
-        incomingRecyclerIsClicked.setValue(visibility1);
-        outgoingRecyclerIsClicked.setValue(visibility2);
-    }
-
     public void getHobbies(){
         MainActivityModel.getHobbies(hobbyList);
     }
 
     public String getUid() {
         return mAuth.getUid();
+    }
+
+    public void setShowingFriends(FriendStatusEnum friends) {
+        friendStatusShowing.setValue(friends);
+    }
+
+    public FriendStatusEnum getFriendStatus() {
+        return friendStatusShowing.getValue();
+    }
+
+    public void setSearchText(String search) {
+        searchText.setValue(search);
     }
 }

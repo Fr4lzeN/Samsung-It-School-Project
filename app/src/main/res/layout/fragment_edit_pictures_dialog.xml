@@ -11,66 +11,76 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone">
-
-    <ImageView
-        android:id="@+id/closeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/close_vector"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        />
-
-    <ImageView
-        android:id="@+id/checkImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/check"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:visibility="gone"/>
 
 
-   <TextView
-       android:id="@+id/header"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toBottomOf="@id/closeImage"
-       android:textSize="24sp"
-       android:layout_marginTop="16dp"
-       android:textColor="@color/black"
-       android:textStyle="bold"
-       android:text="Измените изображения"
-       android:gravity="center"
-       android:layout_marginStart="16dp"
-       android:layout_marginEnd="16dp"
-       />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="80dp"
-            tools:listitem="@layout/pick_profile_picture_item_list"
-            />
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true"
+            android:background="@color/fui_transparent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Изменение данных"
+                app:navigationIcon="@drawable/close_vector"
+                app:titleCentered="true"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:layout_scrollEffect="compress"
+                android:background="@color/fui_transparent"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.MaterialDivider"/>
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="80dp"
+                    tools:listitem="@layout/pick_profile_picture_item_list"
+                    />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/addPicture"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add"
+                    style="@style/Widget.Material3.FloatingActionButton.Large.Primary"
+                    android:layout_gravity="end"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/nextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="64dp"
+                    android:text="Применить"
+                    android:background="@drawable/button_primary"
+                    android:textSize="@dimen/body_large"
+                    style="@style/ButtonPrimary"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

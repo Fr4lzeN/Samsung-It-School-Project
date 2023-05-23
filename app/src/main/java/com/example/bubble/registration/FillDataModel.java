@@ -47,7 +47,7 @@ public class FillDataModel {
     }
 
     public Task<Void> createUser(String name, String info, String gender, Integer[] dateOfBirth) {
-        UserInfoJSON userInfoJSON = new UserInfoJSON(name, info, gender, dateOfBirth[2],dateOfBirth[1],dateOfBirth[0]);
+        UserInfoJSON userInfoJSON = new UserInfoJSON(name, info, gender, dateOfBirth[0],dateOfBirth[1],dateOfBirth[2]);
         return FirebaseActions.createUserDatabase(database, user.getUid(), userInfoJSON);
     }
 

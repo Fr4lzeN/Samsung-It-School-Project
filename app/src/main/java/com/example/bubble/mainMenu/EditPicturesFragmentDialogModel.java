@@ -72,28 +72,7 @@ public class EditPicturesFragmentDialogModel {
         });
     }
 
-    public static void onResult(List<Uri> data, Uri uri, int requestCode) {
-        Log.d("Picture", "3");
-        if (requestCode/10==addPicture){
-            addPicture(uri);
-            return;
-        }
-        if (requestCode/10 ==changePicture){
-            changePicture(requestCode%10, uri);
-            return;
-        }
-        if (requestCode/10 ==deletePicture){
-            deletePicture(requestCode%10);
-        }
-    }
 
-    public static void addPicture(Uri uri){
-        adapter.addData(uri);
-    }
-
-    public static void changePicture(int position, Uri uri){
-        adapter.changeData(uri, position);
-    }
 
     public static void deletePicture(int position){
         adapter.deleteData(position);
@@ -125,8 +104,8 @@ public class EditPicturesFragmentDialogModel {
     }
 
     public static void uploadData(List<Uri> data, MutableLiveData<Boolean> taskResult) {
-       List<UploadTask> tasks = FirebaseActions.uploadPictures(FirebaseStorage.getInstance().getReference(), FirebaseAuth.getInstance().getUid(), data.subList(1, data.size()));
-        Task<Void> userTask = FirebaseActions.updateUserPicture(data.get(1));
+       List<UploadTask> tasks = FirebaseActions.uploadPictures(FirebaseStorage.getInstance().getReference(), FirebaseAuth.getInstance().getUid(), data.subList(0, data.size()));
+        Task<Void> userTask = FirebaseActions.updateUserPicture(data.get(0));
        if (userTask!=null) {
            Tasks.whenAll(Tasks.whenAll(tasks), userTask).addOnCompleteListener(task -> {
                taskResult.setValue(task.isSuccessful());
@@ -140,5 +119,21 @@ public class EditPicturesFragmentDialogModel {
     }
 
 
-
+    public static void getPictures(MutableLiveData<List<Uri>> data) {
+        FirebaseActions.downloadPicture(FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                List<Task<Uri>> allTasks = new ArrayList<>();
+                List<Uri> tempData = new ArrayList<>(Collections.nCopies(task.getResult().getItems().size(), Uri.EMPTY));
+                for (StorageReference i : task.getResult().getItems()){
+                    Log.d("Task",String.valueOf(task.getResult().getItems().indexOf(i)));
+                    allTasks.add(i.getDownloadUrl().addOnCompleteListener(task1 -> tempData.set(task.getResult().getItems().indexOf(i), task1.getResult())));
+                }
+                Tasks.whenAll(allTasks).addOnCompleteListener(task12 -> {
+                    Log.d("Task", "all");
+                    tempData.removeAll(Collections.nCopies(1,Uri.EMPTY));
+                    data.setValue(tempData);
+                });
+            }
+        });
+    }
 }

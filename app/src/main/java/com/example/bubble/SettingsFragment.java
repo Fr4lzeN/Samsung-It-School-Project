@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.window.SplashScreen;
 
 import com.bumptech.glide.Glide;
@@ -46,14 +47,13 @@ public class SettingsFragment extends Fragment {
         this.user = user;
     }
 
+    public SettingsFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        try {
-            binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        }catch (Exception e){
-            Log.d("Error", e.toString());
-        }
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
 
         viewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
 
@@ -64,35 +64,53 @@ public class SettingsFragment extends Fragment {
         viewModel.picture.observe(getViewLifecycleOwner(), storageReference -> {
             Glide.with(requireContext()).load(storageReference).diskCacheStrategy(DiskCacheStrategy.ALL).into(binding.profileImage);
         });
-        binding.name.setOnClickListener(v -> {
-            replaceFragment(new MyProfileFragment());
-        });
 
+        binding.openProfile.setOnClickListener(v -> replaceFragment(new MyProfileFragment()));
 
-
-        binding.editProfileText.setOnClickListener(v -> {
+        binding.editProfile.setOnClickListener(v -> {
             dialogProfile = new EditProfileInfoFragmentDialog(() -> viewModel.refreshUser());
             dialogProfile.show(getParentFragmentManager(), "TAG");
 
         });
-        binding.changeImagesText.setOnClickListener(v -> {
-            dialogPicture = new EditPicturesFragmentDialog(() -> viewModel.refreshUser());
+        binding.editPictures.setOnClickListener(v -> {
+            dialogPicture = new EditPicturesFragmentDialog(() -> {
+                viewModel.refreshUser();
+                viewModel.downloadPicture();
+            });
             dialogPicture.show(getParentFragmentManager(), "TAG");
         });
 
-        binding.chooseHobbyText.setOnClickListener(v -> {
+        binding.editHobby.setOnClickListener(v -> {
             dialogHobby = new ChangeHobbyFragmentDialog();
             dialogHobby.show(getParentFragmentManager(), null);
         });
 
-        binding.logOutText.setOnClickListener(v -> {
+        binding.logout.setOnClickListener(v -> {
             AuthUI.getInstance()
                     .signOut(requireActivity().getApplicationContext())
                     .addOnCompleteListener(task -> restartApp());
         });
 
+        binding.messageUs.setOnClickListener(v -> {
+            sendMessage();
+        });
+
 
         return binding.getRoot();
+    }
+
+
+    private void sendMessage() {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"friended.app.java@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "");
+        i.putExtra(Intent.EXTRA_TEXT   , "");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(requireContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void restartApp() {
