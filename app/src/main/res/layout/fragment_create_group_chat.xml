@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mainMenu.CreateGroupChatFragment"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="Групповой чат"
+        app:navigationIcon="@drawable/close_vector"
+        app:titleCentered="true"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:layout_scrollEffect="compress"
+        android:background="@color/fui_transparent"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:shapeAppearanceOverlay="@style/shapeImageRound"
+        android:background="?attr/colorPrimary"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/add"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageLayout"
+        android:hint="Название чата"
+        app:endIconDrawable="@drawable/backspace"
+        app:endIconMode="clear_text"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/messageEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            style="@style/OutlinedEditText" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/finish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerView"
+            app:layout_constraintBottom_toTopOf="@id/buttons"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/check"
+            style="@style/Widget.Material3.FloatingActionButton.Large.Primary"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="32dp"/>
+
+    </FrameLayout>
+
+
+</LinearLayout>
