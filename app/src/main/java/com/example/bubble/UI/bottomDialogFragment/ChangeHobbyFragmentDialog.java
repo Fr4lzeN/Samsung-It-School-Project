@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -68,7 +69,7 @@ public class ChangeHobbyFragmentDialog extends BottomSheetDialogFragment {
 
         binding.finish.setOnClickListener(v -> {
             binding.progressBar.setVisibility(View.VISIBLE);
-            binding.layout.setVisibility(View.GONE);
+            binding.layout.setVisibility(View.INVISIBLE);
             viewModel.changeHobbies();
         });
         viewModel.result.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -88,7 +89,7 @@ public class ChangeHobbyFragmentDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        CoordinatorLayout layout = binding.getRoot();
+        NestedScrollView layout = binding.getRoot();
         //layout.setMinimumHeight((int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.8));
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height= (int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.9);

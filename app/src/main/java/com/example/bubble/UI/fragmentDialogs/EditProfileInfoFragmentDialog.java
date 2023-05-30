@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bubble.UI.viewModels.EditProfileInfoFragmentDialogViewModel;
@@ -119,7 +120,7 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
         });
 
         binding.finish.setOnClickListener(v -> {
-            binding.layout.setVisibility(View.GONE);
+            binding.layout.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.VISIBLE);
             viewModel.updateInfo(binding.name.getText().toString(),
                     binding.info.getText().toString(),
@@ -155,7 +156,7 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
 
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        CoordinatorLayout layout = binding.getRoot();
+        NestedScrollView layout = binding.getRoot();
         //layout.setMinimumHeight((int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.8));
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height= (int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.9);
