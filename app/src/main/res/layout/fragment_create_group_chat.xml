@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".mainMenu.CreateGroupChatFragment"
+    tools:context=".UI.fragments.CreateGroupChatFragment"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView

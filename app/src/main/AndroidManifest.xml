@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
-        android:name=".FirebaseDatabaseCache"
+        android:name=".data.firebase.FirebaseDatabaseCache"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,15 +21,15 @@
         tools:targetApi="33"
         android:enableOnBackInvokedCallback="true">
         <activity
-            android:name=".registration.FillDataActivity"
+            android:name=".UI.FillDataActivity"
             android:exported="false"
             android:screenOrientation="locked"/>
         <activity
-            android:name=".auth.AuthorizationActivity"
+            android:name=".UI.AuthorizationActivity"
             android:exported="false"
             android:screenOrientation="locked"/>
         <activity
-            android:name=".mainMenu.MainActivity"
+            android:name=".UI.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="locked">

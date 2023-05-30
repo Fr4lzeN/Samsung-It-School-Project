@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/informationTabFragment"
-        android:name="com.example.bubble.InformationTabFragment"
+        android:name="com.example.bubble.UI.fragments.InformationTabFragment"
         android:label="fragment_information_tab"
         tools:layout="@layout/fragment_information_tab" />
     <fragment
         android:id="@+id/hobbyTabFragment"
-        android:name="com.example.bubble.HobbyTabFragment"
+        android:name="com.example.bubble.UI.fragments.HobbyTabFragment"
         android:label="fragment_hobby_tab"
         tools:layout="@layout/fragment_hobby_tab" />
 </navigation>

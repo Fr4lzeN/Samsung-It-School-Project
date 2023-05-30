@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.bubble.mainMenu.SearchFragment"
+        android:name="com.example.bubble.UI.fragments.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -16,36 +16,36 @@
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.example.bubble.mainMenu.MessagesFragment"
+        android:name="com.example.bubble.UI.fragments.MessagesFragment"
         android:label="fragment_messages"
         tools:layout="@layout/fragment_messages" />
     <fragment
         android:id="@+id/friendsFragment"
-        android:name="com.example.bubble.mainMenu.FriendsFragment"
+        android:name="com.example.bubble.UI.fragments.FriendsFragment"
         android:label="fragment_friends"
         tools:layout="@layout/fragment_friends" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.bubble.mainMenu.MyProfileFragment"
+        android:name="com.example.bubble.UI.fragments.MyProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_my_profile" />
     <fragment
         android:id="@+id/loadingFragment"
-        android:name="com.example.bubble.LoadingFragment"
+        android:name="com.example.bubble.UI.fragments.LoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.bubble.SettingsFragment"
+        android:name="com.example.bubble.UI.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/peopleByHobbyFragment"
-        android:name="com.example.bubble.mainMenu.PeopleByHobbyFragment"
+        android:name="com.example.bubble.UI.fragments.PeopleByHobbyFragment"
         android:label="fragment_people_by_hobby"
         tools:layout="@layout/fragment_people_by_hobby" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.bubble.mainMenu.UserProfileFragment"
+        android:name="com.example.bubble.UI.fragments.UserProfileFragment"
         android:label="UserProfileFragment" />
 </navigation>

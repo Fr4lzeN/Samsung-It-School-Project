@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loadPictureFragment"
-        android:name="com.example.bubble.registration.LoadPictureFragment"
+        android:name="com.example.bubble.UI.fragments.LoadPictureFragment"
         android:label="fragment_load_picture"
         tools:layout="@layout/fragment_load_picture" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/hobbyFragment"
-        android:name="com.example.bubble.registration.HobbyFragment"
+        android:name="com.example.bubble.UI.fragments.HobbyFragment"
         android:label="fragment_hobby"
         tools:layout="@layout/fragment_hobby" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="com.example.bubble.registration.UserInfoFragment"
+        android:name="com.example.bubble.UI.fragments.UserInfoFragment"
         android:label="fragment_user_info"
         tools:layout="@layout/fragment_user_info" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/loadingFragment2"
-        android:name="com.example.bubble.registration.FillDataLoadingFragment"
+        android:name="com.example.bubble.UI.fragments.FillDataLoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" />
 </navigation>
