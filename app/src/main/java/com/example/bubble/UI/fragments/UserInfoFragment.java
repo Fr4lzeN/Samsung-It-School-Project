@@ -28,7 +28,6 @@ public class UserInfoFragment extends Fragment {
     FragmentUserInfoBinding binding;
     DatePickerDialog.OnDateSetListener datePicker;
 
-
     FillDataViewModel viewModel;
     String otherGenderBase = "Свой вариант";
 

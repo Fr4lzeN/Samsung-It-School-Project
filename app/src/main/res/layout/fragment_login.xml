@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="150dp"
         android:src="@drawable/friends"
+        app:layout_constraintBottom_toTopOf="@id/headerStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/headerStart"
@@ -24,6 +24,7 @@
         android:text="FRIEND"
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/headline_large"
+        app:layout_constraintBottom_toTopOf="@id/titleStart"
         app:layout_constraintEnd_toStartOf="@id/headerEnd"
         app:layout_constraintStart_toStartOf="@id/logo"
         app:layout_constraintTop_toBottomOf="@id/logo" />
@@ -32,13 +33,12 @@
         android:id="@+id/headerEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="ED"
         android:textColor="?attr/colorTertiary"
         android:textSize="@dimen/headline_large"
         app:layout_constraintEnd_toEndOf="@id/logo"
         app:layout_constraintStart_toEndOf="@id/headerStart"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toTopOf="@id/headerStart" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/titleStart"
@@ -48,6 +48,7 @@
         android:text="Давай дружить "
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/title_large"
+        app:layout_constraintBottom_toTopOf="@id/phoneNumberInputLayout"
         app:layout_constraintEnd_toStartOf="@id/titleEnd"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,13 +58,12 @@
         android:id="@+id/titleEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="вместе!"
         android:textColor="?attr/colorTertiary"
         android:textSize="@dimen/title_large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/titleStart"
-        app:layout_constraintTop_toBottomOf="@id/headerStart" />
+        app:layout_constraintTop_toTopOf="@id/titleStart" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phoneNumberInputLayout"
@@ -81,9 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleStart"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:prefixText="+7"
-        android:preferKeepClear="false">
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phoneNumberEditText"
@@ -91,7 +89,7 @@
             android:layout_height="60dp"
             android:gravity="top"
             android:inputType="phone"
-            android:textSize="@dimen/body_large"/>
+            android:textSize="@dimen/body_large" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -129,6 +127,7 @@
         android:text="Продолжить"
         android:textSize="@dimen/body_large"
         app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/phoneNumberInputLayout"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/phoneNumberInputLayout"
@@ -162,5 +161,6 @@
             android:textColor="?attr/colorPrimary" />
 
     </TextSwitcher>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

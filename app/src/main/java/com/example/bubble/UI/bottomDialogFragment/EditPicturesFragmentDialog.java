@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -97,7 +98,7 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
             if (adapter.getData().size()>=1) {
                 viewModel.uploadData();
                 binding.progressBar.setVisibility(View.VISIBLE);
-                binding.layout.setVisibility(View.GONE);
+                binding.layout.setVisibility(View.INVISIBLE);
             }
             else{
                 Toast.makeText(requireContext(), "Необходима хотя бы 1 фотография", Toast.LENGTH_SHORT).show();
@@ -149,7 +150,7 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        CoordinatorLayout layout = binding.getRoot();
+        NestedScrollView layout = binding.getRoot();
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height= (int) (Resources.getSystem().getDisplayMetrics().heightPixels*0.9);
         binding.appBar.addOnOffsetChangedListener(
