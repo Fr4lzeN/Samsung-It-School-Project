@@ -119,5 +119,6 @@ public class FillDataViewModel extends ViewModel{
         model.changeUserProfilePicture(name.getValue() ,data.getValue().get(0)),
         model.uploadHobby(),
         model.uploadUserPictures(data.getValue())).addOnCompleteListener(task -> firebaseResult.setValue(task.isSuccessful()));
+        model.setPrivate(true);
     }
 }

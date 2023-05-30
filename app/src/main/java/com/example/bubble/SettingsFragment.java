@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -57,12 +58,22 @@ public class SettingsFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
 
+        viewModel.getPrivacy();
+
         viewModel.user.observe(getViewLifecycleOwner(), firebaseUser -> {
             binding.name.setText(firebaseUser.getDisplayName());
             binding.phoneNumberEditText.setText(firebaseUser.getPhoneNumber());
         });
         viewModel.picture.observe(getViewLifecycleOwner(), storageReference -> {
             Glide.with(requireContext()).load(storageReference).diskCacheStrategy(DiskCacheStrategy.ALL).into(binding.profileImage);
+        });
+
+        viewModel.privacy.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean!=null) {
+                binding.privacySwitcher.setChecked(aBoolean);
+            }else{
+                binding.privacySwitcher.setChecked(false);
+            }
         });
 
         binding.openProfile.setOnClickListener(v -> replaceFragment(new MyProfileFragment()));
@@ -72,6 +83,9 @@ public class SettingsFragment extends Fragment {
             dialogProfile.show(getParentFragmentManager(), "TAG");
 
         });
+
+        binding.privacySwitcher.setOnClickListener(v -> viewModel.setPrivacy(binding.privacySwitcher.isChecked()));
+
         binding.editPictures.setOnClickListener(v -> {
             dialogPicture = new EditPicturesFragmentDialog(() -> {
                 viewModel.refreshUser();

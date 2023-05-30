@@ -44,13 +44,12 @@ import io.reactivex.subjects.PublishSubject;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    public static MainActivityViewModel viewModel;
+    MainActivityViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         viewModel.auth();
 
@@ -81,12 +80,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static MainActivityViewModel getViewModel() {
-        return viewModel;
-    }
-
-
-
     public void onStart(){
         super.onStart();
         viewModel.user.observe(this, firebaseUser -> {
@@ -106,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomNavigationView.setSelectedItemId(R.id.search);
                 binding.bottomNavigationView.setVisibility(View.VISIBLE);
                 viewModel.getMessageData();
+                viewModel.getGroupMessageData();
                 viewModel.getFriendList();
                 viewModel.getHobbies();
             }

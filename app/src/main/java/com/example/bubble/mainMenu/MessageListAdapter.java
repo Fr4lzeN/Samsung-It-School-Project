@@ -1,5 +1,6 @@
 package com.example.bubble.mainMenu;
 
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     MessageListItemListBinding binding;
     List<MessageListItem> data;
     OnItemClickListener listener;
+
+    public MessageListAdapter() {
+    }
 
     public MessageListAdapter(List<MessageListItem> data, OnItemClickListener listener) {
         this.data = data;
@@ -55,7 +59,6 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         }catch (java.lang.NullPointerException t){
             Log.d("Error", data.get(position).toString());
             Log.d("Error", t.toString());
-
         }
     }
 

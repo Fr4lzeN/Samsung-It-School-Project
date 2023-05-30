@@ -33,6 +33,10 @@ public class PeopleByHobbyFragmentViewModel extends ViewModel {
         this.hobby = hobby;
     }
 
+    public boolean isDisposalesExist(){
+        return disposables!=null;
+    }
+
     public void disable(){
         PeopleByHobbyFragmentModel.disableDisposables(disposables);
         PeopleByHobbyFragmentModel.deleteListeners(hobby);

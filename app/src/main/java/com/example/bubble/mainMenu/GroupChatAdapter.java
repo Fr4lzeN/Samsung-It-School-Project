@@ -35,6 +35,7 @@ public class GroupChatAdapter extends PeopleListRecyclerView{
         holder.itemView.setOnClickListener(v -> {
             checked.set(position, !checked.get(position));
             this.notifyItemChanged(position);
+            listener.onClick(data.get(position).getUid());
         });
     }
 }

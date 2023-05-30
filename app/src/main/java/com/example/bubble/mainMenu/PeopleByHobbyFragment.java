@@ -23,6 +23,7 @@ public class PeopleByHobbyFragment extends Fragment {
 
    FragmentPeopleByHobbyBinding binding;
    PeopleByHobbyFragmentViewModel viewModel;
+   MainActivityViewModel mViewModel;
    String hobby;
 
     public PeopleByHobbyFragment(String hobby) {
@@ -34,12 +35,15 @@ public class PeopleByHobbyFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentPeopleByHobbyBinding.inflate(inflater,container, false);
         viewModel = new ViewModelProvider(this).get(PeopleByHobbyFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         binding.textView.setText(hobby);
         viewModel.setHobby(hobby);
-        viewModel.getUsers();
+        if (!viewModel.isDisposalesExist()) {
+            viewModel.getUsers();
+        }
         viewModel.data.observe(getViewLifecycleOwner(), friendInfoArrayList -> {
             PeopleListRecyclerView adapter = new PeopleListRecyclerView(friendInfoArrayList, uid -> {
-                if (uid.equals(MainActivity.getViewModel().getUid()))
+                if (uid.equals(mViewModel.getUid()))
                     replaceFragment(new MyProfileFragment());
                 else
                     replaceFragment(new UserProfileFragment(uid));
@@ -57,4 +61,9 @@ public class PeopleByHobbyFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.disable();
+    }
 }

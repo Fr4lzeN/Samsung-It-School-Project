@@ -63,4 +63,7 @@ public class FillDataModel {
         return FirebaseActions.setHobbies(hobby,checked);
     }
 
+    public void setPrivate(boolean b) {
+        FirebaseActions.setPrivateAccount(b);
+    }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bubble.JSON.FriendInfo;
+import com.example.bubble.JSON.GroupMessageListItem;
 import com.example.bubble.JSON.MessageJSON;
 import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.JSON.UserInfoJSON;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -32,20 +34,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.subjects.PublishSubject;
 
 public class FirebaseActions {
 
-    static  ChildEventListener friendListener;
-    static  ChildEventListener uidByHobbyListener;
+    static ChildEventListener friendListener;
+    static ChildEventListener uidByHobbyListener;
 
 
     public static Task<Void> createUserDatabase(DatabaseReference database, String uid, UserInfoJSON userInfoJSON) {
         return database.child("userData").child(uid).child("userInfo").setValue(userInfoJSON);
     }
 
-    public  static  void createUserDB(MutableLiveData<Boolean> result, List<Boolean> sendResults, MutableLiveData<UserInfoJSON> userInfo, FirebaseUser user, String name, String info, String[] dateOfBirth){
+    public static void createUserDB(MutableLiveData<Boolean> result, List<Boolean> sendResults, MutableLiveData<UserInfoJSON> userInfo, FirebaseUser user, String name, String info, String[] dateOfBirth) {
         FirebaseDatabase.getInstance()
                 .getReference("userData")
                 .child(user.getUid()).child("userInfo")
@@ -55,8 +58,8 @@ public class FirebaseActions {
                         Integer.valueOf(dateOfBirth[1]), Integer.valueOf(dateOfBirth[0])))
                 .addOnCompleteListener(task -> {
                     sendResults.add(task.isSuccessful());
-                    if (sendResults.size()==2){
-                        result.setValue(sendResults.get(0)&&sendResults.get(1));
+                    if (sendResults.size() == 2) {
+                        result.setValue(sendResults.get(0) && sendResults.get(1));
                     }
                 });
     }
@@ -69,27 +72,26 @@ public class FirebaseActions {
         return user.updateProfile(profileUpdates);
     }
 
-    public static  void updateUserProfile(MutableLiveData<Boolean> result, List<Boolean> sendResults, FirebaseUser user, String name){
+    public static void updateUserProfile(MutableLiveData<Boolean> result, List<Boolean> sendResults, FirebaseUser user, String name) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build();
         user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
             sendResults.add(task.isSuccessful());
-            if (sendResults.size()==2){
-                result.setValue(sendResults.get(0)&&sendResults.get(1));
+            if (sendResults.size() == 2) {
+                result.setValue(sendResults.get(0) && sendResults.get(1));
             }
         });
     }
 
     public static List<UploadTask> uploadPictures(StorageReference storage, String uid, List<Uri> data) {
         List<UploadTask> results = new ArrayList<>();
-        for (int i=0; i<6; i++){
-            Log.d("Storage", "Picture sent "+i);
+        for (int i = 0; i < 6; i++) {
+            Log.d("Storage", "Picture sent " + i);
             try {
                 results.add(storage.child(uid + "/" + (i + 1)).putFile(data.get(i)));
-            }
-            catch (Throwable t){
-                if (t instanceof java.lang.IndexOutOfBoundsException){
+            } catch (Throwable t) {
+                if (t instanceof java.lang.IndexOutOfBoundsException) {
                     storage.child(uid + "/" + (i + 1)).delete();
                 }
             }
@@ -100,13 +102,12 @@ public class FirebaseActions {
 
     public static Task<Void> uploadUserPictures(StorageReference storage, String uid, List<Uri> data) {
         List<UploadTask> results = new ArrayList<>();
-        for (int i=0; i<6; i++){
-            Log.d("Storage", "Picture sent "+i);
+        for (int i = 0; i < 6; i++) {
+            Log.d("Storage", "Picture sent " + i);
             try {
                 results.add(storage.child(uid + "/" + (i + 1)).putFile(data.get(i)));
-            }
-            catch (Throwable t){
-                if (t instanceof java.lang.IndexOutOfBoundsException){
+            } catch (Throwable t) {
+                if (t instanceof java.lang.IndexOutOfBoundsException) {
                     storage.child(uid + "/" + (i + 1)).delete();
                 }
             }
@@ -118,18 +119,16 @@ public class FirebaseActions {
 
     public static void downloadUserInfo(String uid, MutableLiveData<UserInfoJSON> userInfo) {
         FirebaseDatabase.getInstance().getReference("userData").child(uid).child("userInfo").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-               setUserValue(userInfo, task.getResult());
-            }
-            else{
+            if (task.isSuccessful()) {
+                setUserValue(userInfo, task.getResult());
+            } else {
                 Log.d("UserInfo", "error");
             }
         });
     }
 
 
-
-    public static Task<DataSnapshot> downloadUserInfo(String uid){
+    public static Task<DataSnapshot> downloadUserInfo(String uid) {
         return FirebaseDatabase.getInstance().getReference("userData").child(uid).child("userInfo").get();
     }
 
@@ -140,35 +139,35 @@ public class FirebaseActions {
 
 
     public static void downloadPicture(String uid, MutableLiveData<Uri> picture) {
-       FirebaseStorage.getInstance().getReference(uid).child("1").getDownloadUrl().addOnCompleteListener(task -> {
-           picture.setValue(task.getResult());
-       });
+        FirebaseStorage.getInstance().getReference(uid).child("1").getDownloadUrl().addOnCompleteListener(task -> {
+            picture.setValue(task.getResult());
+        });
     }
 
-    public static Task<Uri> downloadFirstPicture(String uid){
+    public static Task<Uri> downloadFirstPicture(String uid) {
         return FirebaseStorage.getInstance().getReference(uid).child("1").getDownloadUrl();
     }
 
-    public static Task<ListResult> downloadPicture(String uid){
+    public static Task<ListResult> downloadPicture(String uid) {
         return FirebaseStorage.getInstance().getReference(uid).listAll();
     }
 
     public static void downloadAllPictures(String uid, MutableLiveData<List<StorageReference>> data) {
         FirebaseStorage.getInstance().getReference(uid).listAll().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 data.setValue(task.getResult().getItems());
             }
         });
     }
 
-    public static Task<Void> updateUserPicture(Uri uri){
+    public static Task<Void> updateUserPicture(Uri uri) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(uri).build();
         return user.updateProfile(profileUpdates);
     }
 
-    public static Task<Void> setHobbies(List<String> hobbies, List<Boolean> checked){
+    public static Task<Void> setHobbies(List<String> hobbies, List<Boolean> checked) {
         String uid = FirebaseAuth.getInstance().getUid();
         DatabaseReference userData = FirebaseDatabase.getInstance()
                 .getReference("userData")
@@ -177,11 +176,11 @@ public class FirebaseActions {
         DatabaseReference hobbiesData = FirebaseDatabase.getInstance().getReference("hobbies");
         List<String> setHobbies = new ArrayList<>();
         List<Task<Void>> tasks = new ArrayList<>();
-        for (int i=0; i<hobbies.size(); i++){
-            if (checked.get(i)){
+        for (int i = 0; i < hobbies.size(); i++) {
+            if (checked.get(i)) {
                 setHobbies.add(hobbies.get(i));
                 tasks.add(hobbiesData.child(hobbies.get(i)).updateChildren(Collections.singletonMap(uid, uid)));
-            }else{
+            } else {
                 tasks.add(hobbiesData.child(hobbies.get(i)).child(uid).removeValue());
             }
         }
@@ -201,7 +200,7 @@ public class FirebaseActions {
         return FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).get();
     }
 
-    public static DatabaseReference subscribeOnFriendStatus(String myUid, String userUid){
+    public static DatabaseReference subscribeOnFriendStatus(String myUid, String userUid) {
         return FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid);
     }
 
@@ -226,7 +225,7 @@ public class FirebaseActions {
         return Tasks.whenAll(tasks);
     }
 
-    public static Task<Void> declineFriendRequest(String myUid, String userUid){
+    public static Task<Void> declineFriendRequest(String myUid, String userUid) {
         List<Task<Void>> tasks = new ArrayList<>();
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).removeValue());
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).removeValue());
@@ -240,7 +239,7 @@ public class FirebaseActions {
         return Tasks.whenAll(tasks);
     }
 
-    public static void sendMessage(String message, String messageId){
+    public static void sendMessage(String message, String messageId) {
         MessageJSON messageJSON = new MessageJSON(message, FirebaseAuth.getInstance().getUid());
         FirebaseDatabase.getInstance().getReference("chat").child(messageId).updateChildren(Collections.singletonMap(String.valueOf(messageJSON.date), messageJSON));
     }
@@ -251,21 +250,21 @@ public class FirebaseActions {
                 .child(FirebaseAuth.getInstance().getUid())
                 .child("chat").child(uid).get()
                 .addOnCompleteListener(task -> {
-                    if (task.getResult().getValue()!=null) {
+                    if (task.getResult().getValue() != null) {
                         messageSubject.onNext(task.getResult().getValue(String.class));
                     }
                     messageSubject.onComplete();
-        });
+                });
     }
 
-    public static void getChatIds(String uid, PublishSubject<Map.Entry<String, String>> messageSubject){
+    public static void getChatIds(String uid, PublishSubject<Map.Entry<String, String>> messageSubject) {
         FirebaseDatabase.getInstance().getReference("userData")
                 .child(uid)
                 .child("chat")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Map.Entry<String,String> snapshotValue = new AbstractMap.SimpleEntry<>(snapshot.getKey(),snapshot.getValue(String.class));
+                        Map.Entry<String, String> snapshotValue = new AbstractMap.SimpleEntry<>(snapshot.getKey(), snapshot.getValue(String.class));
                         messageSubject.onNext(snapshotValue);
                     }
 
@@ -296,9 +295,9 @@ public class FirebaseActions {
         String key = userReference.push().getKey();
         String mUid = FirebaseAuth.getInstance().getUid();
         Tasks.whenAll(userReference.child(mUid).child("chat").child(uid).setValue(key),
-                userReference.child(uid).child("chat").child(mUid).setValue(key))
+                        userReference.child(uid).child("chat").child(mUid).setValue(key))
                 .addOnCompleteListener(task -> {
-                    FirebaseActions.getMessageId(uid,messageSubject);
+                    FirebaseActions.getMessageId(uid, messageSubject);
                 });
     }
 
@@ -309,15 +308,15 @@ public class FirebaseActions {
                 .get();
         Task<Uri> pictureTask = FirebaseStorage.getInstance().getReference(uid).child("1").getDownloadUrl();
         MessageListItem message = new MessageListItem();
-        message.messageId=chatId;
-        message.uid=uid;
+        message.messageId = chatId;
+        message.uid = uid;
         FirebaseDatabase.getInstance().getReference("chat").child(chatId).limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 message.setMessage(snapshot.getValue(MessageJSON.class));
                 userTask.addOnCompleteListener(task -> message.setUserInfo(task.getResult().getValue(UserInfoJSON.class)));
                 pictureTask.addOnCompleteListener(task -> message.setPicture(task.getResult()));
-                Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
+                Tasks.whenAll(userTask, pictureTask).addOnCompleteListener(task -> {
                     messages.onNext(message);
                 });
             }
@@ -357,8 +356,8 @@ public class FirebaseActions {
                     friend.setPicture(task.getResult());
                 });
 
-                Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
-                    friendStatus.onNext(new AbstractMap.SimpleEntry<>(friend,snapshot.getValue(FriendStatusEnum.class)));
+                Tasks.whenAll(userTask, pictureTask).addOnCompleteListener(task -> {
+                    friendStatus.onNext(new AbstractMap.SimpleEntry<>(friend, snapshot.getValue(FriendStatusEnum.class)));
                 });
             }
 
@@ -430,10 +429,10 @@ public class FirebaseActions {
         });
         Task<Uri> pictureTask = FirebaseStorage.getInstance().getReference(userUid).child("1").getDownloadUrl().addOnCompleteListener(task -> {
             Log.d("UserExits", user.getUid());
-           user.setPicture(task.getResult());
+            user.setPicture(task.getResult());
         });
-        Tasks.whenAll(userTask,pictureTask).addOnCompleteListener(task -> {
-           userData.onNext(user);
+        Tasks.whenAll(userTask, pictureTask).addOnCompleteListener(task -> {
+            userData.onNext(user);
         });
     }
 
@@ -443,20 +442,119 @@ public class FirebaseActions {
 
     public static void createGroupChat(String name, List<String> selected, Uri picture) {
         List<Task<Void>> tasks = new ArrayList<>();
+        selected.add(FirebaseAuth.getInstance().getUid());
         String myUid = FirebaseAuth.getInstance().getUid();
         String pushKey = FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("groupChat").push().getKey();
-       tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(myUid).child("groupChat").child(pushKey).setValue(pushKey));
-        for (String uid : selected){
-            tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(uid).child("groupChat").child(pushKey).setValue(pushKey));
-        }
         tasks.add(FirebaseDatabase.getInstance().getReference("groupChat").child(pushKey).child("name").setValue(name));
-        Tasks.whenAll(Tasks.whenAll(tasks),FirebaseStorage.getInstance().getReference("groupChat").child(pushKey).putFile(picture)).addOnCompleteListener(task -> {
-            sendGroupMessage("Чат "+name+" создан!", pushKey);
+        tasks.add(FirebaseDatabase.getInstance().getReference("groupChat").child(pushKey).child("usersUid").setValue(selected));
+        FirebaseStorage.getInstance().getReference("groupChat").child(pushKey).putFile(picture).addOnCompleteListener(task -> {
+            FirebaseStorage.getInstance().getReference("groupChat").child(pushKey).getDownloadUrl().addOnCompleteListener(task1 -> {
+                tasks.add(FirebaseDatabase.getInstance().getReference("groupChat").child(pushKey).child("picture").setValue(task1.getResult().toString()));
+                Tasks.whenAll(tasks).addOnCompleteListener(task2 -> {
+                    tasks.clear();
+                    tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(myUid).child("groupChat").child(pushKey).setValue(pushKey));
+                    for (String uid : selected) {
+                        tasks.add(FirebaseDatabase.getInstance().getReference().child("userData").child(uid).child("groupChat").child(pushKey).setValue(pushKey));
+                    }
+                    Tasks.whenAll(tasks).addOnCompleteListener(task12 -> {
+                        FirebaseActions.sendGroupMessage("Чат "+name+" был создан", pushKey);
+                    });
+                });
+            });
         });
     }
 
-    public static void sendGroupMessage(String message, String messageId){
+    public static void sendGroupMessage(String message, String messageId) {
         MessageJSON messageJSON = new MessageJSON(message, FirebaseAuth.getInstance().getUid());
-        FirebaseDatabase.getInstance().getReference("groupChat").child(messageId).updateChildren(Collections.singletonMap(String.valueOf(messageJSON.date), messageJSON));
+        FirebaseDatabase.getInstance().getReference("groupChat").child(messageId).child("messages").updateChildren(Collections.singletonMap(String.valueOf(messageJSON.date), messageJSON));
+    }
+
+    public static void getGroupChatIds(String uid, PublishSubject<String> chatId, PublishSubject<String> deleteGroupChatIds) {
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("groupChat").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                chatId.onNext(Objects.requireNonNull(snapshot.getKey()));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                deleteGroupChatIds.onNext(snapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void getGroupChatMessage(String groupChatId, PublishSubject<GroupMessageListItem> groupMessage){
+        GroupMessageListItem message = new GroupMessageListItem(groupChatId);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("groupChat").child(groupChatId);
+        ArrayList<Task<DataSnapshot>> tasks = new ArrayList<>();
+        tasks.add(reference.child("name").get().addOnCompleteListener(task -> message.setChatName(task.getResult().getValue(String.class))));
+        tasks.add(reference.child("picture").get().addOnCompleteListener(task -> message.setPicture(Uri.parse(task.getResult().getValue(String.class)))));
+        reference.child("messages").limitToLast(1).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                message.setMessage(snapshot.getValue(MessageJSON.class));
+                tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(message.message.uid).child("userInfo").child("name").get().addOnCompleteListener(task ->
+                        message.setUserName(task.getResult().getValue(String.class))));
+                Tasks.whenAll(tasks).addOnCompleteListener(task -> groupMessage.onNext(message));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    public static void leaveFromGroupChat(String chatId, String uid) {
+        DatabaseReference user = FirebaseDatabase.getInstance().getReference("userData").child(uid).child("groupChat");
+        DatabaseReference chat =FirebaseDatabase.getInstance().getReference("groupChat").child(chatId).child("usersUid");
+        chat.get().addOnCompleteListener(task -> {
+            ArrayList<String> uids = task.getResult().getValue(new GenericTypeIndicator<ArrayList<String>>() {});
+            uids.remove(uid);
+            Tasks.whenAll(chat.setValue(uids),user.child(chatId).removeValue()).addOnCompleteListener(task1 -> {
+
+            });
+
+        });
+    }
+
+    public static void setPrivateAccount(boolean b) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("private").setValue(b);
+    }
+
+    public static Task<DataSnapshot> getUserPrivacy(String uid) {
+        return FirebaseDatabase.getInstance().getReference("userData").child(uid).child("private").get();
     }
 }

@@ -50,7 +50,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MainActivity.getViewModel().hobbyList.observe(getViewLifecycleOwner(), hobby -> {
+        viewModel.hobbyList.observe(getViewLifecycleOwner(), hobby -> {
             adapter = new SearchHobbiesRecyclerView(hobby,this::replaceFragment);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
             binding.recyclerView.setAdapter(adapter);

@@ -2,6 +2,7 @@ package com.example.bubble.registration;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentRecyclerPictureBottomDialogBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class RecyclerPictureBottomDialogFragment extends BottomSheetDialogFragment {
+public class RecyclerPictureBottomDialogFragment extends DialogFragment {
 
     public interface Callback{
         void callback(TakePictureEnum action);

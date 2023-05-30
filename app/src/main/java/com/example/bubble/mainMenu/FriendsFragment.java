@@ -65,14 +65,14 @@ public class FriendsFragment extends Fragment {
                 case OUTGOING_REQUEST:
                     if (binding.tabLayout.getTabAt(0).isSelected()){
                         binding.tabLayout.getTabAt(2).select();
-                        return;
+                        break;
                     }
                     viewModel.outgoingRequests.observe(getViewLifecycleOwner(), observer);
                     break;
                 case INCOMING_REQUEST:
                     if (binding.tabLayout.getTabAt(0).isSelected()){
                         binding.tabLayout.getTabAt(1).select();
-                        return;
+                        break;
                     }
                     viewModel.incomingRequests.observe(getViewLifecycleOwner(), observer);
                     break;
@@ -152,11 +152,5 @@ public class FriendsFragment extends Fragment {
         }else{
             drawDog(true);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
     }
 }

@@ -20,6 +20,16 @@ public class UserInfoJSON {
         this.gender=gender;
     }
 
+    @Override
+    public String toString() {
+        return "UserInfoJSON{" +
+                "name='" + name + '\'' +
+                ", info='" + info + '\'' +
+                ", gender='" + gender + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                '}';
+    }
+
     public static class DateOfBirth{
         public int year;
         public int month;

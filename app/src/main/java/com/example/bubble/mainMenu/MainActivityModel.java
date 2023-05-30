@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.bubble.JSON.FriendInfo;
+import com.example.bubble.JSON.GroupMessageListItem;
 import com.example.bubble.JSON.MessageListItem;
 import com.example.bubble.MessageListComparator;
 import com.google.firebase.database.GenericTypeIndicator;
@@ -147,5 +148,37 @@ public class MainActivityModel {
         FirebaseActions.getHobbyList().addOnCompleteListener(task -> {
             hobbyList.setValue(task.getResult().getValue(new GenericTypeIndicator<ArrayList<String>>() {}));
         });
+    }
+
+    @SuppressLint("CheckResult")
+    public static void getGroupMessageData(String uid, MutableLiveData<ArrayList<GroupMessageListItem>> allGroupMessagesData) {
+        PublishSubject<String> chatIds = PublishSubject.create();
+        PublishSubject<String> deleteGroupChatIds = PublishSubject.create();
+        PublishSubject<GroupMessageListItem> groupMessage = PublishSubject.create();
+
+        FirebaseActions.getGroupChatIds(uid, chatIds, deleteGroupChatIds);
+        HashMap<String, GroupMessageListItem> messages = new HashMap<>();
+        chatIds.subscribe(
+                id->{
+                    FirebaseActions.getGroupChatMessage(id, groupMessage);
+                });
+
+        groupMessage.subscribe(
+                groupMessageItem ->{
+                    messages.put(groupMessageItem.groupChatId, groupMessageItem);
+                    ArrayList<GroupMessageListItem> allMessages = new ArrayList<>(messages.values());
+                    Collections.sort(allMessages, new MessageListComparator());
+                    allGroupMessagesData.setValue(allMessages);
+                });
+
+        deleteGroupChatIds.subscribe(
+                chatId->{
+                    messages.remove(chatId);
+                    ArrayList<GroupMessageListItem> allMessages = new ArrayList<>(messages.values());
+                    Collections.sort(allMessages, new MessageListComparator());
+                    allGroupMessagesData.setValue(allMessages);
+                }
+        );
+
     }
 }

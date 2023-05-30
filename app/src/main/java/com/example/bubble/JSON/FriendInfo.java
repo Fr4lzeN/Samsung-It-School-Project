@@ -35,6 +35,15 @@ public class FriendInfo {
         return userData;
     }
 
+    @Override
+    public String toString() {
+        return "FriendInfo{" +
+                "userData=" + userData +
+                ", uid='" + uid + '\'' +
+                ", picture=" + picture +
+                '}';
+    }
+
     public String getUid() {
         return uid;
     }

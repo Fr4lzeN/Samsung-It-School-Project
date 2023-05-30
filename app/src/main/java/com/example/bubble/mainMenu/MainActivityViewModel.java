@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bubble.JSON.FriendInfo;
+import com.example.bubble.JSON.GroupMessageListItem;
 import com.example.bubble.JSON.MessageListItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +18,8 @@ public class MainActivityViewModel extends ViewModel {
 
     FirebaseAuth mAuth;
     MutableLiveData<FirebaseUser> user = new MutableLiveData<>();
-    MutableLiveData<ArrayList<MessageListItem>> allMessagesData = new MutableLiveData<>();
+    MutableLiveData<ArrayList<MessageListItem>> allMessagesData = new MutableLiveData<>(new ArrayList<>());
+    MutableLiveData<ArrayList<GroupMessageListItem>> allGroupMessagesData = new MutableLiveData<>(new ArrayList<>());
 
     MutableLiveData<ArrayList<String>> hobbyList = new MutableLiveData<>();
 
@@ -29,6 +31,8 @@ public class MainActivityViewModel extends ViewModel {
     MutableLiveData<FriendStatusEnum> friendStatusShowing = new MutableLiveData<>(FriendStatusEnum.FRIENDS);
     MutableLiveData<String> searchText = new MutableLiveData<>();
 
+    MutableLiveData<Boolean> groupChatSelected = new MutableLiveData<>(false);
+
 
 
 
@@ -39,6 +43,10 @@ public class MainActivityViewModel extends ViewModel {
 
     public void getMessageData() {
         MainActivityModel.getMessageData(mAuth.getUid(),allMessagesData);
+    }
+
+    public void getGroupMessageData(){
+        MainActivityModel.getGroupMessageData(mAuth.getUid(),allGroupMessagesData);
     }
 
     public void getFriendList(){
@@ -63,5 +71,9 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setSearchText(String search) {
         searchText.setValue(search);
+    }
+
+    public void setGroupChatSelected(boolean b) {
+        groupChatSelected.setValue(b);
     }
 }

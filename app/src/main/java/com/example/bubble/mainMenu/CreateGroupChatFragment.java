@@ -1,5 +1,6 @@
 package com.example.bubble.mainMenu;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -7,13 +8,17 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.bubble.JSON.FriendInfo;
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentCreateGroupChatBinding;
+import com.example.bubble.registration.MyTextWatcher;
 
 import java.util.List;
 
@@ -30,26 +36,26 @@ public class CreateGroupChatFragment extends Fragment {
     List<FriendInfo> friendList;
     CreateGroupChatViewModel viewModel;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    GroupChatAdapter adapter;
 
     public CreateGroupChatFragment(List<FriendInfo> friendList) {
         this.friendList = friendList;
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
                 viewModel.setUri(uri);
-                Glide.with(binding.getRoot()).load(uri).into(binding.image);
             } else {
                 Log.d("PhotoPicker", "No media selected");
             }
         });
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -58,24 +64,65 @@ public class CreateGroupChatFragment extends Fragment {
         binding = FragmentCreateGroupChatBinding.inflate(inflater,container,false);
         viewModel = new ViewModelProvider(this).get(CreateGroupChatViewModel.class);
         viewModel.setFriends(friendList);
-
-        viewModel.friendList.observe(getViewLifecycleOwner(), new Observer<List<FriendInfo>>() {
-            @Override
-            public void onChanged(List<FriendInfo> friendInfos) {
-                GroupChatAdapter adapter = new GroupChatAdapter(friendInfos, uid -> viewModel.addUid(uid));
-                binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Log.d("Chat", "started");
+        viewModel.friendList.observe(getViewLifecycleOwner(), friendInfos -> {
+            if (friendInfos!=null) {
+                adapter = new GroupChatAdapter(friendInfos, uid -> viewModel.addUid(uid));
+                binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
                 binding.recyclerView.setAdapter(adapter);
             }
         });
 
+        binding.toolBar.setNavigationOnClickListener(v -> goBack());
+
         binding.image.setOnClickListener(v -> {
+            Log.d("Chat", "image");
             loadImage();
         });
 
-        binding.finish.setOnClickListener(v -> viewModel.createChat(binding.messageEditText.getText().toString()));
+        viewModel.picture.observe(getViewLifecycleOwner(), uri -> {
+            Glide.with(binding.getRoot()).load(uri).into(binding.image);
+            if (!TextUtils.isEmpty(viewModel.chatName.getValue()) && viewModel.selectedPeople.getValue() !=null && viewModel.selectedPeople.getValue().size()>0 && viewModel.chatName.getValue()!=null && !TextUtils.isEmpty(viewModel.chatName.getValue())&& uri!=null){
+                binding.finish.setEnabled(true);
+            }else{
+                binding.finish.setEnabled(false);
+            }
+        });
 
-        binding = FragmentCreateGroupChatBinding.inflate(inflater, container, false);
+        viewModel.chatName.observe(getViewLifecycleOwner(), s -> {
+            if (viewModel.picture.getValue()!=null && !TextUtils.isEmpty(viewModel.chatName.getValue()) && viewModel.selectedPeople.getValue() !=null && viewModel.selectedPeople.getValue().size()>0 && viewModel.chatName.getValue()!=null && !TextUtils.isEmpty(viewModel.chatName.getValue())){
+                binding.finish.setEnabled(true);
+            }else{
+                binding.finish.setEnabled(false);
+            }
+        });
+
+        viewModel.selectedPeople.observe(getViewLifecycleOwner(), strings -> {
+            if (viewModel.picture.getValue()!=null && !TextUtils.isEmpty(viewModel.chatName.getValue()) && viewModel.selectedPeople.getValue() !=null && viewModel.selectedPeople.getValue().size()>0 && viewModel.chatName.getValue()!=null && !TextUtils.isEmpty(viewModel.chatName.getValue())){
+                binding.finish.setEnabled(true);
+            }else{
+                binding.finish.setEnabled(false);
+            }
+        });
+
+        binding.messageEditText.addTextChangedListener(new MyTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.setName(s.toString());
+            }
+        });
+
+        binding.finish.setOnClickListener(v -> {
+            Log.d("Chat", "clicked");
+            viewModel.createChat(binding.messageEditText.getText().toString());
+            goBack();
+        });
         return binding.getRoot();
+    }
+
+    private void goBack() {
+        FragmentManager fm = getParentFragmentManager();
+        fm.popBackStack();
     }
 
     private void loadImage() {

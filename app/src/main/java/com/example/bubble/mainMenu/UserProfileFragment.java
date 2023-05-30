@@ -98,6 +98,8 @@ public class UserProfileFragment extends Fragment {
         viewModel.getHobbies();
         viewModel.getFriendState();
 
+        viewModel.privacy.observe(getViewLifecycleOwner(), aBoolean -> binding.sendMessage.setEnabled(!aBoolean));
+
         viewModel.data.observe(getViewLifecycleOwner(), storageReferences -> {
             adapter = new ProfilePictureRecyclerView(storageReferences);
             binding.selectedPicture.getChildAt(0).performClick();

@@ -3,6 +3,7 @@ package com.example.bubble.registration;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +92,9 @@ public class HobbyRecyclerView extends RecyclerView.Adapter<HobbyRecyclerView.Ho
     public void onBindViewHolder(HobbyViewHolder holder, int position) {
         holder.chip.setText(searchData.get(position));
         holder.chip.setSelected(checked.get(data.indexOf(searchData.get(position))));
+        holder.chip.setChecked(checked.get(data.indexOf(searchData.get(position))));
         holder.bind(position);
-    }
+        }
 
     @Override
     public int getItemCount() {
@@ -116,7 +118,7 @@ public class HobbyRecyclerView extends RecyclerView.Adapter<HobbyRecyclerView.Ho
         public void bind(int position) {
             chip.setOnClickListener(v -> {
                 checked.set(data.indexOf(searchData.get(position)), !checked.get(data.indexOf(searchData.get(position))));
-                HobbyRecyclerView.this.notifyItemChanged(position);
+                notifyDataSetChanged();
                 if (listener!=null){
                     listener.onItemClick(checked.contains(true));
                 }

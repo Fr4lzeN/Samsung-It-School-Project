@@ -1,5 +1,6 @@
 package com.example.bubble.registration;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.bubble.R;
 import com.example.bubble.databinding.FragmentLoadPictureBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
@@ -82,13 +84,17 @@ public class LoadPictureFragment extends Fragment{
 
             if (binding.recyclerView.getAdapter()==null) {
                 adapter = new TakePictureRecyclerView(uris, (data, position) -> {
-                    new RecyclerPictureBottomDialogFragment(action -> {
-                        if (action == TakePictureEnum.DELETE) {
-                            viewModel.deleteAdapterPicture(position);
-                        } else {
-                            pickPicture(position);
-                        }
-                    }).show(getParentFragmentManager(), null);
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Изменение фото")
+                            .setMessage("Выберите, что хотите сделать с выбранной фотографией")
+                            .setPositiveButton("Изменить фотографию", ((dialog, which) -> {
+                                pickPicture(position);
+                            }))
+                            .setNegativeButton("Удалить фотографию", (dialog, which) -> {
+                                viewModel.deleteAdapterPicture(position);
+                            })
+                            .show();
+
                 });
                 binding.recyclerView.setAdapter(adapter);
             }else{
@@ -97,7 +103,6 @@ public class LoadPictureFragment extends Fragment{
             }
         });
         binding.addPicture.setOnClickListener(v -> {
-            //pickPictures(binding.recyclerView.getAdapter().getItemCount());
             pickPictures(0);
         });
         binding.backButton.setOnClickListener(view -> {

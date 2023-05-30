@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bubble.JSON.UserInfoJSON;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,7 +21,7 @@ public class ProfileFragmentViewModel extends ViewModel {
 
     MutableLiveData<List<StorageReference>> data = new MutableLiveData<>();
     MutableLiveData<String> uid = new MutableLiveData<>();
-    MutableLiveData<FriendStatusEnum> friendStatus = new MutableLiveData<>();
+    MutableLiveData<Boolean> privacy = new MutableLiveData<>();
 
     public MutableLiveData<UserInfoJSON> userInfo = new MutableLiveData<>();
     public MutableLiveData<List<String>> hobbies = new MutableLiveData<>();
@@ -40,10 +42,6 @@ public class ProfileFragmentViewModel extends ViewModel {
         ProfileFragmentModel.getHobbies(uid, hobbies);
     }
 
-    public void checkFriendStatus() {
-        ProfileFragmentModel.checkFriendStatus(friendStatus, uid.getValue());
-    }
-
     public void addFriendButton(Context context) {
             ProfileFragmentModel.changeFriendStatus(friendState, uid.getValue(), context);
 
@@ -56,6 +54,7 @@ public class ProfileFragmentViewModel extends ViewModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 friendState.setValue(snapshot.getValue(FriendStatusEnum.class));
+                getPrivacy();
             }
 
             @Override
@@ -67,5 +66,18 @@ public class ProfileFragmentViewModel extends ViewModel {
 
     public UserInfoJSON getUserData() {
         return userInfo.getValue();
+    }
+
+    private void getPrivacy() {
+        FirebaseActions.getUserPrivacy(uid.getValue()).addOnCompleteListener(task -> {
+            Boolean privacy = task.getResult().getValue(Boolean.class);
+            if (privacy!=null) {
+                if (privacy && friendState.getValue() != FriendStatusEnum.FRIENDS) {
+                    this.privacy.setValue(true);
+                    return;
+                }
+            }
+            this.privacy.setValue(false);
+        });
     }
 }

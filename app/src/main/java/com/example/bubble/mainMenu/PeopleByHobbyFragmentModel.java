@@ -47,7 +47,7 @@ public class PeopleByHobbyFragmentModel {
         for (Disposable i : disposables){
             i.dispose();
         }
-        disposables = new ArrayList<>();
+        disposables = null;
     }
 
     public static void deleteListeners(String hobby) {

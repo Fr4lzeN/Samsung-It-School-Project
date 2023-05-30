@@ -36,6 +36,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
 
@@ -123,13 +124,18 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
 
             if (binding.recyclerView.getAdapter()==null) {
                 adapter = new TakePictureRecyclerView(uris, (data, position) -> {
-                    new RecyclerPictureBottomDialogFragment(action -> {
-                        if (action == TakePictureEnum.DELETE) {
-                            viewModel.deleteAdapterPicture(position);
-                        } else {
-                            pickPicture(position);
-                        }
-                    }).show(getParentFragmentManager(), null);
+
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Изменение фото")
+                            .setMessage("Выберите, что хотите сделать с выбранной фотографией")
+                            .setPositiveButton("Изменить фотографию", ((dialog, which) -> {
+                                pickPicture(position);
+                            }))
+                            .setNegativeButton("Удалить фотографию", (dialog, which) -> {
+                                viewModel.deleteAdapterPicture(position);
+                            })
+                            .show();
+
                 });
                 binding.recyclerView.setAdapter(adapter);
             }else{
