@@ -12,7 +12,9 @@ import com.example.bubble.data.JSONModels.GroupMessageListItem;
 import com.example.bubble.data.JSONModels.MessageJSON;
 import com.example.bubble.data.JSONModels.MessageListItem;
 import com.example.bubble.data.JSONModels.UserInfoJSON;
+import com.example.bubble.data.models.NotificationModel;
 import com.example.bubble.tools.ENUMs.FriendStatusEnum;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -222,6 +227,12 @@ public class FirebaseActions {
         List<Task<Void>> tasks = new ArrayList<>();
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatusEnum.FRIENDS.toString()));
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatusEnum.FRIENDS.toString()));
+        Tasks.whenAll(tasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                sendFriendNotification(userUid);
+            }
+        });
         return Tasks.whenAll(tasks);
     }
 
@@ -236,6 +247,12 @@ public class FirebaseActions {
         List<Task<Void>> tasks = new ArrayList<>();
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(myUid).child("friendList").child(userUid).setValue(FriendStatusEnum.OUTGOING_REQUEST));
         tasks.add(FirebaseDatabase.getInstance().getReference("userData").child(userUid).child("friendList").child(myUid).setValue(FriendStatusEnum.INCOMING_REQUEST));
+        Tasks.whenAll(tasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                sendFriendRequestNotification(userUid);
+            }
+        });
         return Tasks.whenAll(tasks);
     }
 
@@ -557,4 +574,54 @@ public class FirebaseActions {
     public static Task<DataSnapshot> getUserPrivacy(String uid) {
         return FirebaseDatabase.getInstance().getReference("userData").child(uid).child("private").get();
     }
+
+    public static void sendToken(String token) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("token").setValue(token);
+    }
+
+    public static void sendMessageNotification(String uid, String message){
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("token").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                String token = task.getResult().getValue(String.class);
+                String body = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                body+=": "+message;
+                String title = "Сообщения";
+                NotificationModel.sendNotification(token,title,body).subscribe();
+            }
+        });
+    }
+
+    public static void sendFriendRequestNotification(String uid){
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("token").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                String token = task.getResult().getValue(String.class);
+                String body = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                body+=" отправил вам заявку в друзья";
+                String title = "Контакты";
+                NotificationModel.sendNotification(token,title,body).subscribe( () ->{
+
+                },
+                        throwable -> {
+                    Log.d("API", throwable.toString());
+                        });
+            }
+        });
+    }
+
+    public static void sendFriendNotification(String uid){
+        FirebaseDatabase.getInstance().getReference("userData").child(uid).child("token").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                String token = task.getResult().getValue(String.class);
+                String body = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                body+=" принял вашу заявку в друзья";
+                String title = "Контакты";
+                NotificationModel.sendNotification(token,title,body).subscribe();
+            }
+        });
+    }
+
 }

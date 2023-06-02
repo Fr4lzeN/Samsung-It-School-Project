@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bubble.UI.adapter.FirebaseMessageAdapter;
 import com.example.bubble.data.JSONModels.UserInfoJSON;
+import com.example.bubble.data.firebase.FirebaseActions;
 import com.example.bubble.data.models.MessageFragmentModel;
 
 public class MessageFragmentViewModel extends ViewModel {
@@ -43,5 +44,9 @@ public class MessageFragmentViewModel extends ViewModel {
 
     public void downloadPicture(String uid) {
         MessageFragmentModel.downloadPicture( uid ,picture);
+    }
+
+    public void setNotification(String uid, String message) {
+        FirebaseActions.sendMessageNotification(uid, message);
     }
 }

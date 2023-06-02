@@ -94,6 +94,7 @@ public class MessageFragment extends Fragment {
             if (!TextUtils.isEmpty(binding.messageEditText.getText().toString())) {
                 if (messageId != null) {
                     viewModel.sendMessage(binding.messageEditText.getText().toString());
+                    viewModel.setNotification(uid,binding.messageEditText.getText().toString());
                 } else {
                     viewModel.createNewMessage(uid, binding.messageEditText.getText().toString());
                 }

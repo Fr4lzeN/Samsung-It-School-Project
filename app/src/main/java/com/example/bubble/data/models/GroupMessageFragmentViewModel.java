@@ -81,4 +81,10 @@ public class GroupMessageFragmentViewModel extends ViewModel {
     public ArrayList<FriendInfo> getUsers() {
         return  users;
     }
+
+    public void sendNotifications(String message) {
+        for (FriendInfo i : users) {
+            FirebaseActions.sendMessageNotification(i.getUid(), message);
+        }
+    }
 }

@@ -1,13 +1,18 @@
 package com.example.bubble.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Notification;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import com.example.bubble.UI.fragments.SettingsFragment;
@@ -16,7 +21,11 @@ import com.example.bubble.UI.fragments.FriendsFragment;
 import com.example.bubble.UI.viewModels.MainActivityViewModel;
 import com.example.bubble.UI.fragments.MessagesFragment;
 import com.example.bubble.UI.fragments.SearchFragment;
+import com.example.bubble.data.firebase.FirebaseActions;
 import com.example.bubble.databinding.ActivityMainBinding;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         viewModel.auth();
-
         viewModel.incomingRequests.observe(this, friendInfos -> {
             if (friendInfos!=null && friendInfos.size()!=0) {
                 binding.bottomNavigationView.getOrCreateBadge(R.id.friends).setNumber(friendInfos.size());
@@ -79,9 +87,21 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.getGroupMessageData();
                 viewModel.getFriendList();
                 viewModel.getHobbies();
+                refreshToken();
             }
 
         });
+
+    }
+
+
+
+    private void refreshToken() {
+        SharedPreferences preferences = getSharedPreferences("notification",MODE_PRIVATE);
+        String token = preferences.getString("token", null);
+        if (token!=null){
+            FirebaseActions.sendToken(token);
+        }
 
     }
 

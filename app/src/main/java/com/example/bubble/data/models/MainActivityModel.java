@@ -123,7 +123,11 @@ public class MainActivityModel {
                     List<FriendInfo> temp = new ArrayList<>(secondList.getValue());
                     temp.remove(i);
                     secondList.setValue(temp);
-                    temp = new ArrayList<>(firstList.getValue());
+                    if (firstList.getValue()!=null) {
+                        temp = new ArrayList<>(firstList.getValue());
+                    }else{
+                        temp = new ArrayList<>();
+                    }
                     temp.add(i);
                     firstList.setValue(temp);
                     return true;

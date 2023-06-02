@@ -71,6 +71,7 @@ public class GroupMessageFragment extends Fragment implements View.OnClickListen
         binding.messageLayout.setEndIconOnClickListener(v -> {
             if (!TextUtils.isEmpty(binding.messageEditText.getText().toString())){
                 FirebaseActions.sendGroupMessage(binding.messageEditText.getText().toString(), chatId);
+                viewModel.sendNotifications(binding.messageEditText.getText().toString());
                 binding.messageEditText.setText("");
             }
         });
