@@ -20,6 +20,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -37,6 +38,8 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
         void dismiss();
     }
 
+    private String uid;
+
     private FragmentDialogEditProfileInfoBinding binding;
     DatePickerDialog.OnDateSetListener datePicker;
     EditProfileInfoFragmentDialogViewModel viewModel;
@@ -46,6 +49,12 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
     DismissListener listener;
 
     public EditProfileInfoFragmentDialog(DismissListener listener) {
+        uid = FirebaseAuth.getInstance().getUid();
+        this.listener = listener;
+    }
+
+    public EditProfileInfoFragmentDialog(DismissListener listener, String uid) {
+        this.uid = uid;
         this.listener = listener;
     }
 
@@ -62,7 +71,7 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDialogEditProfileInfoBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(EditProfileInfoFragmentDialogViewModel.class);
-        viewModel.downloadUserInfo();
+        viewModel.downloadUserInfo(uid);
         viewModel.userInfo.observe(getViewLifecycleOwner(), userInfoJSON -> {
             displayInfo(userInfoJSON);
             binding.progressBar.setVisibility(View.GONE);
@@ -124,7 +133,8 @@ public class EditProfileInfoFragmentDialog extends BottomSheetDialogFragment{
             binding.progressBar.setVisibility(View.VISIBLE);
             viewModel.updateInfo(binding.name.getText().toString(),
                     binding.info.getText().toString(),
-                    binding.dateOfBirth.getText().toString());
+                    binding.dateOfBirth.getText().toString(),
+                    uid);
         });
 
 

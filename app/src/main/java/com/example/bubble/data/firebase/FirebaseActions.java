@@ -53,10 +53,10 @@ public class FirebaseActions {
         return database.child("userData").child(uid).child("userInfo").setValue(userInfoJSON);
     }
 
-    public static void createUserDB(MutableLiveData<Boolean> result, List<Boolean> sendResults, MutableLiveData<UserInfoJSON> userInfo, FirebaseUser user, String name, String info, String[] dateOfBirth) {
+    public static void createUserDB(MutableLiveData<Boolean> result, List<Boolean> sendResults, MutableLiveData<UserInfoJSON> userInfo, String uid, String name, String info, String[] dateOfBirth) {
         FirebaseDatabase.getInstance()
                 .getReference("userData")
-                .child(user.getUid()).child("userInfo")
+                .child(uid).child("userInfo")
                 .setValue(new UserInfoJSON(
                         name, info,
                         userInfo.getValue().gender, Integer.valueOf(dateOfBirth[2]),

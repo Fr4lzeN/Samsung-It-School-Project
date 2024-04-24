@@ -18,13 +18,22 @@ import android.view.ViewGroup;
 
 import com.example.bubble.UI.adapter.ProfilePictureAdapter;
 import com.example.bubble.R;
+import com.example.bubble.UI.bottomDialogFragment.EditPicturesFragmentDialog;
+import com.example.bubble.UI.fragmentDialogs.EditProfileInfoFragmentDialog;
+import com.example.bubble.UI.viewModels.MainActivityViewModel;
 import com.example.bubble.UI.viewModels.ProfileFragmentViewModel;
 import com.example.bubble.databinding.FragmentUserProfileBinding;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 public class UserProfileFragment extends Fragment {
 
     String uid;
+
+    Boolean edit = false;
 
     FragmentUserProfileBinding binding;
     ProfilePictureAdapter adapter;
@@ -34,7 +43,6 @@ public class UserProfileFragment extends Fragment {
     public UserProfileFragment(String uid) {
         this.uid = uid;
     }
-
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
@@ -85,6 +93,13 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(ProfileFragmentViewModel.class);
+        MainActivityViewModel activityViewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
+        if (activityViewModel.admin!=null && activityViewModel.admin && !Objects.equals(uid, FirebaseAuth.getInstance().getUid())){
+            edit = true;
+            binding.sendMessage.setText("Изменить фото");
+            binding.addFriend.setText("Редактировать профиль");
+        }
+
         viewModel.setUid(uid);
 
         viewModel.downloadPictures();
@@ -136,6 +151,7 @@ public class UserProfileFragment extends Fragment {
         });
 
         viewModel.friendState.observe(getViewLifecycleOwner(), friendStatusEnum -> {
+            if (edit) return;
             if (friendStatusEnum!=null) {
                 switch (friendStatusEnum) {
                     case FRIENDS:
@@ -154,11 +170,24 @@ public class UserProfileFragment extends Fragment {
         });
 
         binding.addFriend.setOnClickListener(v -> {
-            viewModel.addFriendButton(requireContext());
+            if (!edit){
+                viewModel.addFriendButton(requireContext());
+            }else{
+                EditProfileInfoFragmentDialog dialogProfile = new EditProfileInfoFragmentDialog(() -> viewModel.downloadUserData(), uid);
+                dialogProfile.show(getParentFragmentManager(), "TAG");
+            }
+
         });
 
         binding.sendMessage.setOnClickListener(v -> {
-            replaceFragment(new MessageFragment(uid, viewModel.getUserData()));
+            if (!edit){
+                replaceFragment(new MessageFragment(uid, viewModel.getUserData()));
+            }else{
+                EditPicturesFragmentDialog dialogPicture = new EditPicturesFragmentDialog(() -> {
+                    viewModel.downloadPictures();
+                }, uid);
+                dialogPicture.show(getParentFragmentManager(), "TAG");
+            }
         });
 
         return binding.getRoot();

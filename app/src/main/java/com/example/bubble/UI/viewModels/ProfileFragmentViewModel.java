@@ -21,6 +21,7 @@ import java.util.List;
 public class ProfileFragmentViewModel extends ViewModel {
 
     public MutableLiveData<List<StorageReference>> data = new MutableLiveData<>();
+    public Boolean admin = false;
     MutableLiveData<String> uid = new MutableLiveData<>();
     public MutableLiveData<Boolean> privacy = new MutableLiveData<>();
 

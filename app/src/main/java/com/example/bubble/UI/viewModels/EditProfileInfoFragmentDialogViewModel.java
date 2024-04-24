@@ -20,13 +20,13 @@ public class EditProfileInfoFragmentDialogViewModel extends ViewModel {
     public  MutableLiveData<Boolean> result = new MutableLiveData<>();
 
 
-    public void downloadUserInfo(){
-        EditProfileInfoFragmentDialogModel.downloadUserInfo(user, userInfo);
+    public void downloadUserInfo(String uid){
+        EditProfileInfoFragmentDialogModel.downloadUserInfo(uid, userInfo);
     }
 
 
-    public void updateInfo(String name, String info, String dateOfBirth) {
-        EditProfileInfoFragmentDialogModel.updateInfo(result, sendResults, userInfo, user, name, info, dateOfBirth.split("/"));
+    public void updateInfo(String name, String info, String dateOfBirth, String uid) {
+        EditProfileInfoFragmentDialogModel.updateInfo(result, sendResults, userInfo, user, name, info, dateOfBirth.split("/"), uid);
     }
 
     public void setGender(String gender) {

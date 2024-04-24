@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
 
@@ -45,6 +46,8 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
     BottomSheetBehavior<View> bottomSheetBehavior;
 
     TakePictureAdapter adapter;
+
+    String uid;
 
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMultipleMedia;
@@ -85,6 +88,12 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
 
     public EditPicturesFragmentDialog(DismissListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
+    }
+
+    public EditPicturesFragmentDialog(DismissListener listener, String uid) {
+        this.listener = listener;
+        this.uid = uid;
     }
 
     @Override
@@ -92,11 +101,11 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         binding = FragmentEditPicturesDialogBinding.inflate(inflater, container, false);
         viewModel.createModel();
-        viewModel.downloadData();
+        viewModel.downloadData(uid);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.nextButton.setOnClickListener(v -> {
             if (adapter.getData().size()>=1) {
-                viewModel.uploadData();
+                viewModel.uploadData(uid);
                 binding.progressBar.setVisibility(View.VISIBLE);
                 binding.layout.setVisibility(View.INVISIBLE);
             }

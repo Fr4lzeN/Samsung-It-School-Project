@@ -24,12 +24,12 @@ public class EditPicturesFragmentDialogViewModel extends ViewModel {
       return EditPicturesFragmentDialogModel.getAdapter();
    }
 
-   public void uploadData() {
-      EditPicturesFragmentDialogModel.uploadData(data.getValue(), taskResult);
+   public void uploadData(String uid) {
+      EditPicturesFragmentDialogModel.uploadData(data.getValue(), taskResult, uid);
    }
 
-   public void downloadData(){
-       EditPicturesFragmentDialogModel.getPictures(data);
+   public void downloadData(String uid){
+       EditPicturesFragmentDialogModel.getPictures(data, uid);
    }
 
     public void addPictureToAdapter(List<Uri> data) {

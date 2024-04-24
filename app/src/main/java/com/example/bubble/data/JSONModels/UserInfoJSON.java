@@ -10,6 +10,8 @@ public class UserInfoJSON {
     public String gender;
     public DateOfBirth dateOfBirth;
 
+    public Boolean admin;
+
     public UserInfoJSON() {
     }
 

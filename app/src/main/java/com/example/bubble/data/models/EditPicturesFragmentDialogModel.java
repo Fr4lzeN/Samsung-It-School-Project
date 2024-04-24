@@ -78,8 +78,8 @@ public class EditPicturesFragmentDialogModel {
         return adapter;
     }
 
-    public static void uploadData(List<Uri> data, MutableLiveData<Boolean> taskResult) {
-       List<UploadTask> tasks = FirebaseActions.uploadPictures(FirebaseStorage.getInstance().getReference(), FirebaseAuth.getInstance().getUid(), data.subList(0, data.size()));
+    public static void uploadData(List<Uri> data, MutableLiveData<Boolean> taskResult, String uid) {
+       List<UploadTask> tasks = FirebaseActions.uploadPictures(FirebaseStorage.getInstance().getReference(), uid, data.subList(0, data.size()));
         Task<Void> userTask = FirebaseActions.updateUserPicture(data.get(0));
        if (userTask!=null) {
            Tasks.whenAll(Tasks.whenAll(tasks), userTask).addOnCompleteListener(task -> {
@@ -94,8 +94,8 @@ public class EditPicturesFragmentDialogModel {
     }
 
 
-    public static void getPictures(MutableLiveData<List<Uri>> data) {
-        FirebaseActions.downloadPicture(FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(task -> {
+    public static void getPictures(MutableLiveData<List<Uri>> data, String uid) {
+        FirebaseActions.downloadPicture(uid).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 List<Task<Uri>> allTasks = new ArrayList<>();
                 List<Uri> tempData = new ArrayList<>(Collections.nCopies(task.getResult().getItems().size(), Uri.EMPTY));
