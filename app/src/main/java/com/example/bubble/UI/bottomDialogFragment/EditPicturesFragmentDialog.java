@@ -133,7 +133,7 @@ public class EditPicturesFragmentDialog extends BottomSheetDialogFragment {
                                 pickPicture(position);
                             }))
                             .setNegativeButton("Удалить фотографию", (dialog, which) -> {
-                                viewModel.deleteAdapterPicture(position);
+                                viewModel.deleteAdapterPicture(Math.min(position-1,0));
                             })
                             .show();
 

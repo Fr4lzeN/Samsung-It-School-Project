@@ -55,7 +55,6 @@ public class FirebaseMessageAdapter extends FirebaseRecyclerAdapter<MessageJSON,
         else{
             params.gravity= Gravity.START;
             holder.text.setGravity(Gravity.START);
-            holder.time.setGravity(Gravity.START);
             holder.itemView.getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true);
         }
         holder.message.setLayoutParams(params);

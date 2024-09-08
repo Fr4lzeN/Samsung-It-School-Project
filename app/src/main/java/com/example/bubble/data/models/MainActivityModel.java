@@ -121,7 +121,6 @@ public class MainActivityModel {
             for (FriendInfo i : secondList.getValue()) {
                 if (i.getUid().equals(uid)) {
                     List<FriendInfo> temp = new ArrayList<>(secondList.getValue());
-                    temp.remove(i);
                     secondList.setValue(temp);
                     if (firstList.getValue()!=null) {
                         temp = new ArrayList<>(firstList.getValue());

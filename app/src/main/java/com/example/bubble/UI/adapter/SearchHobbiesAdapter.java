@@ -32,7 +32,7 @@ public class SearchHobbiesAdapter extends RecyclerView.Adapter<SearchHobbiesAdap
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<String> filtered = new ArrayList<>();
             if (TextUtils.isEmpty(constraint)){
-                filtered.addAll(data);
+                filtered.addAll(new java.util.ArrayList<>());
             }else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (String i : data){
